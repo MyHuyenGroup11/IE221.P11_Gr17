@@ -21,7 +21,7 @@ class Category_lv2(models.Model):
     # Khóa ngoại tham chiếu đến phân loại lv1
     cate_1 = models.ForeignKey(Category_lv1, on_delete=models.SET_NULL, null=True, blank=False)
     cate_2 = models.CharField(max_length=500)
-    cate_2_image = models.ImageField(null=True, blank=False)
+    
     num_products = models.IntegerField(default=0) # Số loại món ăn thuộc danh mục cấp 2
 
     def __str__(self) -> str:
