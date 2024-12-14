@@ -12,7 +12,7 @@ def TrangChu(request):
         avatar = Product_Image.objects.filter(prod_name=product, is_avatar=True).first()
         product.avatar_url = avatar.ImageURL if avatar else None
     
-     # Định dạng giá
+    # Định dạng giá
         product.prod_price_formatted = "{:,.0f}".format(product.prod_price)
 
     # Cập nhật số lượng món ăn cho tất phân loại 2
@@ -180,3 +180,24 @@ def ChiTietSanPham(request, cate_lv1_name, cate_lv2_name, product_name):
 
     }
     return render(request, 'ChiTietSanPham.html', context)
+
+def TimKiem(request):
+    if request.method == "POST":
+        searched = request.POST["searched"]
+        result = Product.objects.filter(prod_name__contains = searched)
+        for product in result:
+            avatar = Product_Image.objects.filter(prod_name=product, is_avatar=True).first()
+            product.avatar_url = avatar.ImageURL if avatar else None
+
+            # Định dạng giá
+            product.prod_price_formatted = "{:,.0f}".format(product.prod_price)
+    context = {"searched":searched, "result": result}
+    return render(request, 'TimKiem.html', context)
+
+def product_detail(request, prod_cate_lv1, prod_cate_lv2, prod_name):
+    product = Product.objects.get(
+        prod_cate_lv1=prod_cate_lv1, 
+        prod_cate_lv2=prod_cate_lv2, 
+        prod_name=prod_name
+    )
+    return render(request, 'ChiTietSanPham.html', {'product': product})

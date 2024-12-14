@@ -120,10 +120,6 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-# STATICFILES_DIRS = [
-#     r"D:\Máy tính\PYTHON\IE221.P11_Gr17\myWeb\myWeb\static",
-# ]
-
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]

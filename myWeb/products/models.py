@@ -42,7 +42,6 @@ class Product(models.Model):
 
     def __str__(self) -> str:
         return self.prod_name
-    
 # Ảnh của món ăn: 1 món ăn có thể có nhiều ảnh, và 1 ảnh trong số đó là avatar của món ăn
 class Product_Image(models.Model):
     prod_name = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True, blank=False)
