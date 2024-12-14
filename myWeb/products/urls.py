@@ -3,7 +3,9 @@ from django.urls import path, include
 from . import views
 
 urlpatterns = [
-    path('', views.TrangChu, name='TrangChu')
+    path('', views.TrangChu, name='TrangChu'),
+    
+    path('<str:cate_lv1_name>/', views.PList_Lv1, name='categories_products'),
 ]
 
 # setting url của hình ảnh

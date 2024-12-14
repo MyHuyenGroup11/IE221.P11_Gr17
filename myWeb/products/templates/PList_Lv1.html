@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'css/product_page_style.css' %}">
+<section class="bread-crumb">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                {% for item in breadcrumb %}
+                    {% if forloop.last %}
+                        <li class="breadcrumb-item active" aria-current="page">{{ item.name }}</li>
+                    {% else %}
+                        <li class="breadcrumb-item"><a href="{{ item.url }}">{{ item.name }}</a></li>
+                    {% endif %}
+                {% endfor %}
+            </ol>
+        </nav>
+    </div>
+</section>
+
+<section class="categories"> 
+    <div class="container">
+        <h1>{{ cate_lv1.cate_1 }}</h1>
+        <div class="grid">
+            {% for category in categories_lv2 %}
+            <a href="#">
+                <div class="card">
+                    <div class="card-body">
+                        <p class="name-cate">{{ category.cate_2 }}</p>
+                        <p class="num-product">{{ category.num_products }} món</p>
+                    </div>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+    
+    <section class="product-list">
+        <div class="container">
+            <div class="product-header">
+                <div class="grid">
+                    <h1>Danh sách món {{cate_lv1.cate_1}}</h1>
+                    <div class="sort">
+                        <h2>Sắp xếp theo</h2>
+                        <button id="sort-default">Mặc định</button> 
+                        <button id="sort-asc">Tăng dần</button>
+                        <button id="sort-desc">Giảm dần</button>
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="filter-and-product-cards">
+                <div class="container">
+                    <div class="product-cards">
+                        <div class="grid" id="product-list">
+                            {% for product in page_obj %}
+                            <div class="card">
+                                <img src="{{ product.avatar_url }}" class="card-img-top" alt="{{product.prod_name}}">
+                                <div class="card-body">
+                                    <h5 class="card-title line-clamp">
+                                        {{product.prod_name}}
+                                    </h5>     
+                                    <div class="product-info">
+                                        <p class="price">{{product.prod_price_formatted}} đ/Phần</p>
+                                    </div>
+                                    <button>CHỌN MUA</button>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+    
+                    <!-- Phân trang -->
+                    <div class="PhanTrang">
+                        <nav aria-label="Page navigation" class="mt-4">
+                            <ul class="pagination justify-content-center">
+                                {% if page_obj.has_previous %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                                {% endif %}
+    
+                                {% for num in page_range %}
+                                    {% if num == '...' %}
+                                        <li class="page-item disabled"><span class="page-link">...</span></li>
+                                    {% else %}
+                                        <li class="page-item {% if page_obj.number == num %}active{% endif %}">
+                                            <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}
+    
+                                {% if page_obj.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                                {% endif %}
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}

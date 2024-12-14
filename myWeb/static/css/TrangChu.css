@@ -49,29 +49,23 @@
 .grid .card .card-body .product-info .price {
     font-size: 16px;
     font-weight: bold;
-    color: #377CE6;
+    color: brown;
     margin: 2px 0;
-    
-}
-
-del {
-    color: rgb(91, 91, 91);
-    min-height: 1em; 
-    display: inline-block; 
-    margin-bottom: 0px;
 }
 
 .price {
     margin-bottom: 0px;
 }
 
-.grid .card .card-body .product-info .rate-and-sold .rate,
-.grid .card .card-body .product-info .rate-and-sold .sold {
-    margin-bottom: auto;
-
-    font-size: 14px;
-    color: rgb(91, 91, 91);
-    margin: 0 4px;
+.card-title {
+    font-size: 16px;
+    display: -webkit-box;              /* Bật chế độ flex cho line clamp */
+    -webkit-line-clamp: 1;            /* Hiển thị tối đa 2 dòng */
+    -webkit-box-orient: vertical;     /* Đặt hướng cho box */
+    overflow: hidden;                 /* Ẩn phần thừa nếu vượt quá */
+    text-overflow: ellipsis;          /* Thêm dấu "..." nếu nội dung bị cắt */
+    line-height: 1.5;                 /* Khoảng cách giữa các dòng */
+    min-height: calc(1.5em * 2);      /* Đảm bảo chiều cao 2 dòng (1.5em mỗi dòng) */
 }
 
 .grid .card .card-body button {

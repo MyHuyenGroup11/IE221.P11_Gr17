@@ -52,7 +52,7 @@
             <ul>
                 {% for data in categories_data %}
                     <li class="dropdown">
-                        <a href="#">
+                        <a href="{% url 'categories_products' data.cate_lv1.cate_1 %}">
                             {{ data.cate_lv1.cate_1 }}
                         </a>
                         <div class="dropdown-content">
