@@ -1,13 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.contrib.auth.forms import UserCreationForm
-from django import forms
 
-# Tạo class để thay đổi form đăng nhập của django bằng cách kế thừa class UserCreationForm
-class CreateUserForm(UserCreationForm):
-    class Meta:
-        model = User
-        fields = ['username','email','first_name','last_name','password1','password2']
+
 
 # Phân loại món ăn lv1: Khai vị, Món chính, Món tráng miệng, Nước uống
 class Category_lv1(models.Model):
