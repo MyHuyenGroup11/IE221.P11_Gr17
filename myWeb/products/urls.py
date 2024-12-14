@@ -7,6 +7,7 @@ urlpatterns = [
     
     path('<str:cate_lv1_name>/', views.PList_Lv1, name='categories_products'),
     path('<str:cate_lv1_name>/<str:cate_lv2_name>/', views.PList_Lv2, name='categories_lv2'),
+    path('<str:cate_lv1_name>/<str:cate_lv2_name>/<str:product_name>/', views.ChiTietSanPham, name='product_detail'),
 ]
 
 # setting url của hình ảnh

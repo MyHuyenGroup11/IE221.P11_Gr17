@@ -1,6 +1,5 @@
 :root {
     --background-color1: #EDF0F3;
-    --background-color2: #FCF3E8;
 }
 
 * {
@@ -13,6 +12,7 @@ body {
 
 a {
     text-decoration: none;
+    color: black;
 }
 
 ul {
@@ -171,6 +171,45 @@ nav .dropdown:hover .dropdown-content {
 }
 /* End dropdown Nav */
 
+/* Breadcrumb  */
+.breadcrumb {
+    background-color: #EDF0F3;
+}
+
 .breadcrumb-item a {
     color: brown;
+}
+/* pop up them vao gio hang */
+.popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+}
+
+.popup img {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.hidden {
+    display: none;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    display: none;
 }

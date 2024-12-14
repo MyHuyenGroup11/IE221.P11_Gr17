@@ -107,7 +107,6 @@ def PList_Lv2(request, cate_lv1_name, cate_lv2_name):
         # Định dạng giá
         product.prod_price_formatted = "{:,.0f}".format(product.prod_price)
 
-
     # Cập nhật breadcrumb
     breadcrumb = [
         {"name": "Trang chủ", "url": "/"},
@@ -149,3 +148,35 @@ def PList_Lv2(request, cate_lv1_name, cate_lv2_name):
     }
 
     return render(request, 'PList_Lv2.html', context)
+
+def ChiTietSanPham(request, cate_lv1_name, cate_lv2_name, product_name):
+    # Lấy danh mục cấp 1 và cấp 2 dựa trên tên
+    cate_lv1 = get_object_or_404(Category_lv1, cate_1=cate_lv1_name)
+    cate_lv2 = get_object_or_404(Category_lv2, cate_2=cate_lv2_name, cate_1=cate_lv1)
+
+    # Lấy sản phẩm
+    product = get_object_or_404(Product, prod_name=product_name, prod_cate_lv1=cate_lv1, prod_cate_lv2=cate_lv2)
+
+    # Lấy danh sách ảnh của sản phẩm
+    images = Product_Image.objects.filter(prod_name=product)
+    images_with_url = [{'url': img.ImageURL, 'is_avatar': img.is_avatar} for img in images]
+    
+    # Định dạng giá
+    product.prod_price_formatted = "{:,.0f}".format(product.prod_price)
+    
+    # Cập nhật breadcrumb
+    breadcrumb = [
+        {"name": "Trang chủ", "url": "/"},
+        {"name": cate_lv1.cate_1, "url": f"/{cate_lv1.cate_1}/"},
+        {"name": cate_lv2.cate_2, "url": f"/{cate_lv1.cate_1}/{cate_lv2.cate_2}/"}
+    ]
+    
+    context = {
+        'cate_lv1': cate_lv1,
+        'cate_lv2': cate_lv2,
+        'product': product,
+        'images': images_with_url,
+        'breadcrumb': breadcrumb
+
+    }
+    return render(request, 'ChiTietSanPham.html', context)

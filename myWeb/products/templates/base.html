@@ -21,6 +21,7 @@
 
     <!-- CSS nội bộ từ thư mục static -->
     <link rel="stylesheet" href = "{% static 'css/base.css' %}">
+    
 </head>
 
 <body>
@@ -83,5 +84,29 @@
         </div>
     </footer>
 </body>
+
+<script>
+    // 1. Hiển thị pop up thông báo khi ấn nút Chọn mua
+    document.addEventListener('DOMContentLoaded', () => {
+        const popup = document.getElementById('popup');
+        const popupButtons = document.querySelectorAll('.update-cart');
+    
+        popupButtons.forEach(button => {
+            button.addEventListener('click', () => {
+               
+                    showPopup();
+                
+            });
+        });
+    
+        function showPopup() {
+            popup.classList.remove('hidden'); // Hiển thị popup
+    
+            setTimeout(() => {
+                popup.classList.add('hidden'); // Ẩn popup sau 2 giây
+            }, 2000);
+        }
+    });
+</script>
 
 </html>

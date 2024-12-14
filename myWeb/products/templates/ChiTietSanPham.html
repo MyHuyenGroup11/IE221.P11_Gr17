@@ -1,0 +1,199 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/ctsp_tyle.css' %}">
+<section class="bread-crumb">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                {% for item in breadcrumb %}
+                    {% if forloop.last %}
+                        <li class="breadcrumb-item active" aria-current="page">{{ item.name }}</li>
+                    {% else %}
+                        <li class="breadcrumb-item"><a href="{{ item.url }}">{{ item.name }}</a></li>
+                    {% endif %}
+                {% endfor %}
+            </ol>
+        </nav>
+    </div>
+</section>
+
+    <section>
+        <div class="container">
+            <div class="box">
+                <div class="col-sm-5">
+                    <div id="carouselExampleIndicators" class="carousel slide">
+                        <!-- Carousel items -->
+                        <div class="carousel-inner">
+                            {% for img in images %}
+                            <div class="carousel-item {% if forloop.first %}active{% endif %}" data-bs-slide-to="{{ forloop.counter0 }}">
+                                <img src="{{ img.url }}" class="d-block w-100" alt="Slide {{ forloop.counter }}">
+                            </div>
+                            {% endfor %}
+                        </div>
+                    
+                        <!-- Thumbnails navigation with scrolling -->
+                        <div class="thumbnails-container d-flex align-items-center justify-content-center mt-3">
+                            <button id="thumbPrev" class="btn btn-outline-primary rounded-circle d-none">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            </button>
+                    
+                            <div class="carousel-thumbnails-wrapper overflow-hidden mx-2">
+                                <div class="carousel-thumbnails d-flex">
+                                    {% for img in images %}
+                                    <img src="{{ img.url }}" 
+                                        data-bs-target="#carouselExampleIndicators" data-bs-slide-to="{{ forloop.counter0 }}" 
+                                        class="{% if forloop.first %}active-thumbnail{% endif %}" 
+                                        alt="Thumbnail {{ forloop.counter }}">
+                                    {% endfor %}
+                                </div>
+                            </div>
+                    
+                            <button id="thumbNext" class="btn btn-outline-primary rounded-circle">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="addtocart-buy">                     
+                        <div id="popup" class="popup hidden">
+                            <img src="{% static 'image/Thông báo Thêm vào giỏ hàng.png' %}" alt="Sản phẩm đã được thêm vào giỏ hàng">
+                        </div> 
+                        <button data-product="{{ product.id }}" data-action="add" class="addtocart update-cart">Thêm vào giỏ hàng</button>
+                        
+                    </div>
+                     
+                </div>
+                <div class="col-sm-7">
+                    <h1>{{product.prod_name}}</h1>
+                    <div class="product-info">
+                        <p class="price">{{product.prod_price_formatted}} đ/Phần</p>
+                    </div>
+
+                    <div class="overall">
+                        
+                        <hr>
+                        <div class="overall-item">
+                            <h3>Danh mục</h3>
+                            <p>{{product.prod_cate_lv1}}, {{product.prod_cate_lv2}}</p>
+                        </div>
+                        <hr>
+                        <div class="overall-item">
+                            <h3>Mô tả ngắn</h3>
+                            <p>{{product.prod_description}}</p>
+                        </div>
+                        
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        //Carousel cho ảnh sản phẩm
+        
+        document.addEventListener('DOMContentLoaded', function () {
+            const carousel = document.querySelector('#carouselExampleIndicators');
+            const thumbnails = document.querySelectorAll('.carousel-thumbnails img');
+            const thumbnailsWrapper = document.querySelector('.carousel-thumbnails');
+            const thumbPrev = document.querySelector('#thumbPrev');
+            const thumbNext = document.querySelector('#thumbNext');
+            
+            const maxVisibleThumbnails = 4; // Số lượng thumbnails tối đa hiển thị mỗi lần
+            const totalThumbnails = thumbnails.length; // Tổng số ảnh thumbnail
+            let startIndex = 0; // Vị trí bắt đầu của thumbnails đang hiển thị
+            let activeIndex = 0; // Vị trí của ảnh đang active trên carousel
+            
+            const updateThumbnailVisibility = () => {
+                // Kiểm tra nút Prev
+                if (startIndex === 0) {
+                    thumbPrev.classList.add('d-none'); // Ẩn nếu đang ở vị trí đầu tiên
+                } else {
+                    thumbPrev.classList.remove('d-none'); // Hiện nếu không ở vị trí đầu tiên
+                }
+            
+                // Kiểm tra nút Next
+                if (startIndex + maxVisibleThumbnails >= totalThumbnails) {
+                    thumbNext.classList.add('d-none'); // Ẩn nếu ở vị trí cuối cùng
+                } else {
+                    thumbNext.classList.remove('d-none'); // Hiện nếu còn ảnh phía sau
+                }
+            
+                // Dịch chuyển thumbnails (Hiện 4 ảnh mỗi lần)
+                const offset = -startIndex * (60 + 10); // 60px là chiều rộng mỗi ảnh, 10px là khoảng cách giữa các ảnh
+                thumbnailsWrapper.style.transform = `translateX(${offset}px)`;
+            };
+        
+            // Cập nhật lại ảnh active cho các thumbnail
+            const updateActiveThumbnail = () => {
+                thumbnails.forEach((thumbnail, index) => {
+                    if (index === activeIndex) {
+                        thumbnail.classList.add('active-thumbnail');
+                    } else {
+                        thumbnail.classList.remove('active-thumbnail');
+                    }
+                });
+            };
+            
+            // Sự kiện bấm nút Prev
+            thumbPrev.addEventListener('click', (e) => {
+                e.preventDefault(); // Ngừng hành động mặc định của nút Prev
+                if (startIndex > 0) {
+                    startIndex -= maxVisibleThumbnails; // Di chuyển 4 ảnh về phía trước
+                    activeIndex -= maxVisibleThumbnails; // Di chuyển 4 ảnh về phía trước trong carousel
+                    if (startIndex < 0) startIndex = 0; // Đảm bảo không bị tràn quá ảnh đầu tiên
+                    updateThumbnailVisibility();
+                    
+                    // Đặt lại activeIndex thành ảnh đầu tiên của nhóm thumbnail mới
+                    activeIndex = startIndex;
+                    updateActiveThumbnail();
+                    
+                    // Chuyển đến ảnh đầu tiên của nhóm thumbnail hiện tại
+                    const carouselInstance = bootstrap.Carousel.getInstance(carousel);
+                    carouselInstance.to(activeIndex); // Chuyển đến slide tương ứng
+                }
+            });
+            
+            // Sự kiện bấm nút Next
+            thumbNext.addEventListener('click', (e) => {
+                e.preventDefault(); // Ngừng hành động mặc định của nút Next
+                if (startIndex + maxVisibleThumbnails < totalThumbnails) {
+                    startIndex += maxVisibleThumbnails; // Di chuyển 4 ảnh về phía sau
+                    activeIndex += maxVisibleThumbnails; // Di chuyển 4 ảnh tiếp theo trong carousel
+                    updateThumbnailVisibility();
+                    
+                    // Đặt lại activeIndex thành ảnh đầu tiên của nhóm thumbnail mới
+                    activeIndex = startIndex;
+                    updateActiveThumbnail();
+                    
+                    // Chuyển đến ảnh đầu tiên của nhóm thumbnail mới
+                    const carouselInstance = bootstrap.Carousel.getInstance(carousel);
+                    carouselInstance.to(activeIndex); // Chuyển đến slide tương ứng
+                }
+            });
+            
+            // Đồng bộ trạng thái thumbnails khi carousel thay đổi slide
+            carousel.addEventListener('slide.bs.carousel', function (e) {
+                activeIndex = parseInt(e.relatedTarget.dataset.bsSlideTo);
+                
+                // Kiểm tra và đặt lại startIndex sao cho luôn bắt đầu từ ảnh đầu tiên của nhóm
+                if (activeIndex % maxVisibleThumbnails === 0 || activeIndex === 0) {
+                    startIndex = activeIndex; // Đặt lại startIndex về ảnh đầu tiên của nhóm
+                } else if (activeIndex % maxVisibleThumbnails !== 0 && activeIndex > startIndex + maxVisibleThumbnails - 1) {
+                    startIndex = activeIndex - (activeIndex % maxVisibleThumbnails); // Điều chỉnh startIndex về ảnh đầu tiên trong nhóm
+                }
+                
+                // Đặt lại active thumbnail
+                updateActiveThumbnail();
+                updateThumbnailVisibility(); // Cập nhật lại vị trí của các thumbnails
+            });
+        
+            // Khởi tạo trạng thái ban đầu
+            updateThumbnailVisibility();
+            updateActiveThumbnail();
+        });
+    </script>
+        
+{% endblock %}
