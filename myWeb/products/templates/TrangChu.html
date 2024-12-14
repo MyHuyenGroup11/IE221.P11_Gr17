@@ -1,90 +1,27 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block products %}
+{% block content %}
 <link rel="stylesheet" href = "{% static 'css/TrangChu.css' %}">
 
 <section class="products">
     <div class="container">
         <div class="grid">
+            {% for product in page_obj %}
             <div class="card">
-
+                <img src="{{ product.avatar_url }}" class="card-img-top" alt="{{product.prod_name}}">
                 <div class="card-body">
                     <h5 class="card-title line-clamp">
-                        Bún bò
-                    </h5>
-                    <p class="price"><del>120.000 đ</del></p>
+                        {{product.prod_name}}
+                    </h5>     
                     <div class="product-info">
-                        <p class="price">100.000 đ/Phần</p>
+                        <p class="price">{{product.prod_price_formatted}} đ/Phần</p>
                     </div>
                     <button>CHỌN MUA</button>
                 </div>
             </div>
-            <div class="card">
-                
-                <div class="card-body">
-                    <h5 class="card-title line-clamp">Bún bò
-                    </h5>
-                    <p class="price"><del>120.000 đ</del></p>
-                    <div class="product-info">
-                        <p class="price">100.000 đ/Phần</p>
-
-                    </div>
-                    <button>CHỌN MUA</button>
-                </div>
-            </div><div class="card">
-                
-                <div class="card-body">
-                    <h5 class="card-title line-clamp">Bún bò
-                    </h5>
-                    <p class="price"><del>120.000 đ</del></p>
-                    <div class="product-info">
-                        <p class="price">100.000 đ/Phần</p>
-
-                    </div>
-                    <button>CHỌN MUA</button>
-                </div>
-            </div>
-            <div class="card">
-                
-                <div class="card-body">
-                    <h5 class="card-title line-clamp">Bún bò
-                    </h5>
-                    <p class="price"><del>120.000 đ</del></p>
-                    <div class="product-info">
-                        <p class="price">100.000 đ/Phần</p>
-
-                    </div>
-                    <button>CHỌN MUA</button>
-                </div>
-            </div>
-            <div class="card">
-                
-                <div class="card-body">
-                    <h5 class="card-title line-clamp">Bún bò
-                    </h5>
-                    <p class="price"><del>120.000 đ</del></p>
-                    <div class="product-info">
-                        <p class="price">100.000 đ/Phần</p>
-
-                    </div>
-                    <button>CHỌN MUA</button>
-                </div>
-            </div>
-            <div class="card">
-                
-                <div class="card-body">
-                    <h5 class="card-title line-clamp">Bún bò
-                    </h5>
-                    <p class="price"><del>120.000 đ</del></p>
-                    <div class="product-info">
-                        <p class="price">100.000 đ/Phần</p>
-
-                    </div>
-                    <button>CHỌN MUA</button>
-                </div>
-            </div>
+            {% endfor %}
         </div>
     </div>
 </section>
-{% endblock products %}
+{% endblock %}
