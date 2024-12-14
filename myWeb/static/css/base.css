@@ -170,3 +170,7 @@ nav .dropdown:hover .dropdown-content {
     display: block;
 }
 /* End dropdown Nav */
+
+.breadcrumb-item a {
+    color: brown;
+}

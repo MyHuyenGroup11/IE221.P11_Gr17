@@ -90,3 +90,62 @@ def PList_Lv1(request, cate_lv1_name):
     }
 
     return render(request, 'PList_Lv1.html', context)
+
+def PList_Lv2(request, cate_lv1_name, cate_lv2_name):
+    # Lấy danh mục cấp 1 và cấp 2 dựa trên tên
+    cate_lv1 = get_object_or_404(Category_lv1, cate_1=cate_lv1_name)
+    cate_lv2 = get_object_or_404(Category_lv2, cate_2=cate_lv2_name, cate_1=cate_lv1)
+
+    # Lấy món ăn thuộc danh mục cấp 2
+    products = Product.objects.filter(prod_cate_lv2=cate_lv2)
+
+    # Lấy món ăn và gắn URL của ảnh avatar vào từng món ăn
+    for product in products:
+        avatar = Product_Image.objects.filter(prod_name=product, is_avatar=True).first()
+        product.avatar_url = avatar.ImageURL if avatar else None
+
+        # Định dạng giá
+        product.prod_price_formatted = "{:,.0f}".format(product.prod_price)
+
+
+    # Cập nhật breadcrumb
+    breadcrumb = [
+        {"name": "Trang chủ", "url": "/"},
+        {"name": cate_lv1.cate_1, "url": f"/{cate_lv1.cate_1}/"},
+        {"name": cate_lv2.cate_2, "url": f"/{cate_lv1.cate_1}/{cate_lv2.cate_2}/"}
+    ]
+
+
+    # Phân trang với 12 món ăn mỗi trang
+    paginator = Paginator(products, 12)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    # Xử lý hiển thị phân trang rút gọn
+    total_pages = paginator.num_pages
+    current_page = page_obj.number
+    if total_pages <= 7:
+        page_range = paginator.page_range
+    else:
+        if current_page <= 4:
+            page_range = list(range(1, 6)) + ['...'] + [total_pages]
+        elif current_page > total_pages - 4:
+            page_range = [1] + ['...'] + list(range(total_pages - 4, total_pages + 1))
+        else:
+            page_range = (
+                [1] + ['...']
+                + list(range(current_page - 1, current_page + 2))
+                + ['...']
+                + [total_pages]
+            )
+
+    # Cập nhật context
+    context = {
+        'cate_lv1': cate_lv1,
+        'cate_lv2': cate_lv2,
+        'page_obj': page_obj,
+        'page_range': page_range,
+        'breadcrumb': breadcrumb
+    }
+
+    return render(request, 'PList_Lv2.html', context)

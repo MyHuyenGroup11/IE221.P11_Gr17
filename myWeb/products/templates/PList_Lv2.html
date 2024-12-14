@@ -12,37 +12,18 @@
                     {% if forloop.last %}
                         <li class="breadcrumb-item active" aria-current="page">{{ item.name }}</li>
                     {% else %}
-                        <li class="breadcrumb-item no-active"><a href="{{ item.url }}">{{ item.name }}</a></li>
+                        <li class="breadcrumb-item"><a href="{{ item.url }}">{{ item.name }}</a></li>
                     {% endif %}
                 {% endfor %}
             </ol>
         </nav>
     </div>
 </section>
-
-<section class="categories"> 
-    <div class="container">
-        <h1>{{ cate_lv1.cate_1 }}</h1>
-        <div class="grid">
-            {% for category in categories_lv2 %}
-            <a href="{% url 'categories_lv2' cate_lv1.cate_1 category.cate_2 %}">
-                <div class="card">
-                    <div class="card-body">
-                        <p class="name-cate">{{ category.cate_2 }}</p>
-                        <p class="num-product">{{ category.num_products }} món</p>
-                    </div>
-                </div>
-            </a>
-            {% endfor %}
-        </div>
-    </div>
-</section>
-    
     <section class="product-list">
         <div class="container">
             <div class="product-header">
                 <div class="grid">
-                    <h1>Danh sách món {{cate_lv1.cate_1}}</h1>
+                    <h1>Danh sách món {{ cate_lv2.cate_2}}</h1>
                     <div class="sort">
                         <h2>Sắp xếp theo</h2>
                         <button id="sort-default">Mặc định</button> 
@@ -109,5 +90,9 @@
             </div>
         </div>
     </section>
+    
+    
+    
+    
 
 {% endblock %}
