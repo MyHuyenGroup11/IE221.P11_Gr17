@@ -93,3 +93,81 @@ button {
     color: black;
 }
 /* End Button */
+/* Navigator */
+
+nav {
+    background-color: white;
+    margin-bottom: 10px;
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+nav ul {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0px;
+}
+
+nav ul li {
+    width: 250px;
+    padding: 5px;
+    text-align: center;
+}
+
+nav ul li a {
+    color: black;
+    width: 100%;
+
+}
+/* End Navigator */
+
+/* dropdown Nav */
+nav .dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+nav .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: white;
+    width: 230px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    margin-top: 5px;
+    z-index: 3;
+    border-radius: 0px 0px 10px 10px;
+    overflow: hidden;
+    padding: 10px;
+}
+
+nav .dropdown-content ul {
+    display: flex;
+    flex-direction: column;
+}
+
+nav .dropdown-content ul li {
+    width: 100%;
+    text-align: left;
+}
+
+nav .dropdown-content ul li:hover {
+    background-color: var(--background-color1);
+    cursor: pointer;
+}
+
+nav .dropdown-content ul li a {
+    color: black;
+    padding: 0px;
+    width: 100%;
+    display: flex;
+}
+
+nav .dropdown-content ul li a img {
+    width: 25px;
+    height: 25px;
+    margin-right: 5px;
+}
+
+nav .dropdown:hover .dropdown-content {
+    display: block;
+}
+/* End dropdown Nav */

@@ -47,6 +47,32 @@
         </div>
     </header>
     
+    <nav>
+        <div class="container">
+            <ul>
+                {% for data in categories_data %}
+                    <li class="dropdown">
+                        <a href="#">
+                            {{ data.cate_lv1.cate_1 }}
+                        </a>
+                        <div class="dropdown-content">
+                            <ul>
+                                {% for cate_lv2 in data.categories_lv2 %}
+                                    <li>
+                                        <a href="#">
+                                            
+                                            {{ cate_lv2.cate_2 }}
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </nav>
+
     {% block content %}
         
     {% endblock %}
