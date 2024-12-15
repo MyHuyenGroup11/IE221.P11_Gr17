@@ -9,18 +9,18 @@
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 {% for item in breadcrumb %}
-                    {% if forloop.last %}
-                        <li class="breadcrumb-item active" aria-current="page">{{ item.name }}</li>
-                    {% else %}
-                        <li class="breadcrumb-item no-active"><a href="{{ item.url }}">{{ item.name }}</a></li>
-                    {% endif %}
+                {% if forloop.last %}
+                <li class="breadcrumb-item active" aria-current="page">{{ item.name }}</li>
+                {% else %}
+                <li class="breadcrumb-item no-active"><a href="{{ item.url }}">{{ item.name }}</a></li>
+                {% endif %}
                 {% endfor %}
             </ol>
         </nav>
     </div>
 </section>
 
-<section class="categories"> 
+<section class="categories">
     <div class="container">
         <div class="grid">
             {% for category in categories_lv2 %}
@@ -36,84 +36,150 @@
         </div>
     </div>
 </section>
-    
-    <section class="product-list">
-        <div class="container">
-            <div class="product-header">
-                <div class="grid">
-                    <h1>Danh sách món {{cate_lv1.cate_1}}</h1>
-                    <div class="sort">
-                        <h2>Sắp xếp theo</h2>
-                        <button id="sort-default">Mặc định</button> 
-                        <button id="sort-asc">Tăng dần</button>
-                        <button id="sort-desc">Giảm dần</button>
-                        
-                    </div>
-                </div>
-            </div>
-            <div class="product-cards">
-                <div class="container">
-                    <div class="product-cards">
-                        <div class="grid" id="product-list">
-                            {% for product in page_obj %}
-                            <div class="card">
-                                <a href="{% url 'product_detail' product.prod_cate_lv1 product.prod_cate_lv2 product.prod_name %}" class="card-title-link">
-                                    <img src="{{ product.avatar_url }}" class="card-img-top" alt="{{product.prod_name}}">
-                                </a>
-                                <div class="card-body">
-                                <a href="{% url 'product_detail' product.prod_cate_lv1 product.prod_cate_lv2 product.prod_name %}" class="card-title-link">
-                                    <h5 class="card-title line-clamp">
-                                        {{product.prod_name}}
-                                    </h5>
-                                </a>     
-                                    <div class="product-info">
-                                        <p class="price">{{product.prod_price_formatted}} đ/Phần</p>
-                                    </div>
-                                    <div id="popup" class="popup hidden">
-                                        <img src="{% static 'image/Thông báo Thêm vào giỏ hàng.png' %}" alt="Sản phẩm đã được thêm vào giỏ hàng">
-                                    </div>
-                                    <button data-product="{{ product.id }}" data-action="add" class="addtocart update-cart">CHỌN MÓN</button>
-                                </div>
-                            </div>
-                            {% endfor %}
-                        </div>
-                    </div>
-    
-                    <!-- Phân trang -->
-                    <div class="PhanTrang">
-                        <nav aria-label="Page navigation" class="mt-4">
-                            <ul class="pagination justify-content-center">
-                                {% if page_obj.has_previous %}
-                                <li class="page-item">
-                                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
-                                        <span aria-hidden="true">&laquo;</span>
-                                    </a>
-                                </li>
-                                {% endif %}
-    
-                                {% for num in page_range %}
-                                    {% if num == '...' %}
-                                        <li class="page-item disabled"><span class="page-link">...</span></li>
-                                    {% else %}
-                                        <li class="page-item {% if page_obj.number == num %}active{% endif %}">
-                                            <a class="page-link" href="?page={{ num }}">{{ num }}</a>
-                                        </li>
-                                    {% endif %}
-                                {% endfor %}
-    
-                                {% if page_obj.has_next %}
-                                <li class="page-item">
-                                    <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
-                                        <span aria-hidden="true">&raquo;</span>
-                                    </a>
-                                </li>
-                                {% endif %}
-                            </ul>
-                        </nav>
-                    </div>
+
+<section class="product-list">
+    <div class="container">
+        <div class="product-header">
+            <div class="grid">
+                <h1>Danh sách món {{cate_lv1.cate_1}}</h1>
+                <div class="sort">
+                    <h2>Sắp xếp theo Giá</h2>
+                    <button id="sort-default">Mặc định</button>
+                    <button id="sort-asc">Tăng dần</button>
+                    <button id="sort-desc">Giảm dần</button>
+
                 </div>
             </div>
         </div>
-    </section>
+        <div class="product-cards">
+            <div class="container">
+                <div class="product-cards">
+                    <div class="grid" id="product-list">
+                        {% for product in page_obj %}
+                        <div class="card">
+                            <a href="{% url 'product_detail' product.prod_cate_lv1 product.prod_cate_lv2 product.prod_name %}"
+                                class="card-title-link">
+                                <img src="{{ product.avatar_url }}" class="card-img-top" alt="{{product.prod_name}}">
+                            </a>
+                            <div class="card-body">
+                                <a href="{% url 'product_detail' product.prod_cate_lv1 product.prod_cate_lv2 product.prod_name %}"
+                                    class="card-title-link">
+                                    <h5 class="card-title line-clamp">
+                                        {{product.prod_name}}
+                                    </h5>
+                                </a>
+                                <div class="product-info">
+                                    <p class="price">{{product.prod_price_formatted}} đ/Phần</p>
+                                </div>
+                                <div id="popup" class="popup hidden">
+                                    <img src="{% static 'image/Thông báo Thêm vào giỏ hàng.png' %}"
+                                        alt="Sản phẩm đã được thêm vào giỏ hàng">
+                                </div>
+                                <button data-product="{{ product.id }}" data-action="add"
+                                    class="addtocart update-cart">CHỌN MÓN</button>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
 
+                <!-- Phân trang -->
+                <div class="PhanTrang">
+                    <nav aria-label="Page navigation" class="mt-4">
+                        <ul class="pagination justify-content-center">
+                            {% if page_obj.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.previous_page_number }}"
+                                    aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                            {% endif %}
+
+                            {% for num in page_range %}
+                            {% if num == '...' %}
+                            <li class="page-item disabled"><span class="page-link">...</span></li>
+                            {% else %}
+                            <li class="page-item {% if page_obj.number == num %}active{% endif %}">
+                                <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                            </li>
+                            {% endif %}
+                            {% endfor %}
+
+                            {% if page_obj.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    // Sắp xếp cho trang danh sách sản phẩm lv1 (Chỉ có bộ lọc theo giá)
+    document.addEventListener('DOMContentLoaded', () => {
+        const sortAscBtn = document.getElementById('sort-asc');
+        const sortDescBtn = document.getElementById('sort-desc');
+        const sortDefaultBtn = document.getElementById('sort-default'); // Nút mặc định
+        const productList = document.getElementById('product-list');
+        const old_list = Array.from(productList.children); // Danh sách ban đầu của sản phẩm
+
+        // Khi trang được tải lần đầu, nút "Mặc định" sẽ được active
+        sortDefaultBtn.classList.add('active');
+
+        function sortProducts(products, order) {
+            return products.sort((a, b) => {
+                const priceA = parseFloat(a.dataset.price);
+                const priceB = parseFloat(b.dataset.price);
+
+                if (order === 'asc') {
+                    return priceA - priceB;
+                } else {
+                    return priceB - priceA;
+                }
+            });
+        }
+
+        // Lắng nghe sự kiện cho nút sắp xếp
+        sortAscBtn.addEventListener('click', () => {
+            sortAscBtn.classList.add('active');
+            sortDescBtn.classList.remove('active');
+            sortDefaultBtn.classList.remove('active');
+
+            const sortedProducts = sortProducts(old_list, 'asc');
+
+            // Cập nhật lại danh sách sản phẩm
+            productList.innerHTML = '';
+            sortedProducts.forEach(product => productList.appendChild(product));
+        });
+
+        sortDescBtn.addEventListener('click', () => {
+            sortDescBtn.classList.add('active');
+            sortAscBtn.classList.remove('active');
+            sortDefaultBtn.classList.remove('active');
+
+            const sortedProducts = sortProducts(old_list, 'desc');
+
+            // Cập nhật lại danh sách sản phẩm
+            productList.innerHTML = '';
+            sortedProducts.forEach(product => productList.appendChild(product));
+        });
+
+        sortDefaultBtn.addEventListener('click', () => {
+            sortAscBtn.classList.remove('active');
+            sortDescBtn.classList.remove('active');
+            sortDefaultBtn.classList.add('active');
+
+            // Hiển thị lại danh sách ban đầu
+            productList.innerHTML = '';
+            old_list.forEach(product => productList.appendChild(product));
+        });
+    });
+</script>
 {% endblock %}

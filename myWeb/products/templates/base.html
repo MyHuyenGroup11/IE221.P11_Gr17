@@ -146,7 +146,6 @@
 </body>
 
 <script>
-
     // 1. Ngăn không cho tìm kiếm với từ rỗng
     function validateSearch() {
         var searched = document.querySelector('[name="searched"]').value.trim();
@@ -157,33 +156,8 @@
         return true;
     }
 
-    // 2. Hiển thị pop up thông báo khi ấn nút Chọn mua
-    document.addEventListener('DOMContentLoaded', () => {
-        const popup = document.getElementById('popup');
-        const popupButtons = document.querySelectorAll('.update-cart');
-    
-        popupButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                if (user === "AnonymousUser") {
-                    // Không làm gì cả nếu chưa đăng nhập hoặc có thể dẫn qua trang đăng nhập
-                    
-                } else {
-                    showPopup();
-                }
-            });
-        });
-    
-        function showPopup() {
-            popup.classList.remove('hidden'); // Hiển thị popup
-    
-            setTimeout(() => {
-                popup.classList.add('hidden'); // Ẩn popup sau 2 giây
-            }, 2000);
-        }
-    });
-
-    // 3.Thêm vào giỏ hàng, xóa khỏi giỏ hàng, cập nhật giỏ hàng
-    console.log('hello');
+    // 2. Thêm vào giỏ hàng, xóa khỏi giỏ hàng, cập nhật giỏ hàng
+    console.log('Bắt đầu mua hàng');
     var updateBtns = document.getElementsByClassName('update-cart');
 
     for (let i = 0; i < updateBtns.length; i++) {
@@ -227,8 +201,33 @@
             });
     }
 
-    // 4. Gắn thuộc tính placeholder bằng js vì model không truyền thuộc tính vào được 
-    document.addEventListener('DOMContentLoaded', function() {
+    // 3. Hiển thị pop up thông báo khi ấn nút Chọn mua
+    document.addEventListener('DOMContentLoaded', () => {
+        const popup = document.getElementById('popup');
+        const popupButtons = document.querySelectorAll('.update-cart');
+    
+        popupButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                if (user === "AnonymousUser") {
+                    // Không làm gì cả nếu chưa đăng nhập hoặc có thể dẫn qua trang đăng nhập
+                    
+                } else {
+                    showPopup();
+                }
+            });
+        });
+    
+        function showPopup() {
+            popup.classList.remove('hidden'); // Hiển thị popup
+    
+            setTimeout(() => {
+                popup.classList.add('hidden'); // Ẩn popup sau 2 giây
+            }, 2000);
+        }
+    });
+
+    //4. Gắn thuộc tính placeholder bằng js vì model không truyền thuộc tính vào được 
+        document.addEventListener('DOMContentLoaded', function() {
         const password1Field = document.getElementById('id_password1');
         const password2Field = document.getElementById('id_password2');
     
@@ -236,23 +235,5 @@
         password1Field.setAttribute('placeholder', 'Nhập mật khẩu');
         password2Field.setAttribute('placeholder', 'Nhập lại mật khẩu');
     });
-
-    // 5. Kiểm tra xem có chọn sản phẩm chưa trước khi tạo đơn hàng
-    document.addEventListener('DOMContentLoaded', function () {
-        const checkoutButton = document.getElementById('DatHang');
-        const itemCheckboxes = document.querySelectorAll('.item-checkbox');
-
-        checkoutButton.addEventListener('click', function (event) {
-            // Kiểm tra nếu không có checkbox nào được chọn
-            const isAnyItemSelected = Array.from(itemCheckboxes).some(checkbox => checkbox.checked);
-            
-            if (!isAnyItemSelected) {
-                event.preventDefault(); // Ngăn không cho điều hướng
-                alert('Bạn chưa chọn sản phẩm nào trong giỏ hàng.');
-            }
-        });
-    });
-
 </script>
-
 </html>

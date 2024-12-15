@@ -153,7 +153,6 @@
     });
 </script>
 
-
 <script>
     // Lấy tất cả các nút tăng/giảm số lượng
     const quantityInputs = document.querySelectorAll('.quantity');
@@ -175,6 +174,21 @@
     document.addEventListener('DOMContentLoaded', updateTotalItems);
 </script>
 
+<script>
+        // Kiểm tra xem có chọn sản phẩm chưa trước khi tạo đơn hàng
+        document.addEventListener('DOMContentLoaded', function () {
+        const checkoutButton = document.getElementById('DatHang');
+        const itemCheckboxes = document.querySelectorAll('.item-checkbox');
 
-
+        checkoutButton.addEventListener('click', function (event) {
+            // Kiểm tra nếu không có checkbox nào được chọn
+            const isAnyItemSelected = Array.from(itemCheckboxes).some(checkbox => checkbox.checked);
+            
+            if (!isAnyItemSelected) {
+                event.preventDefault(); // Ngăn không cho điều hướng
+                alert('Bạn chưa chọn sản phẩm nào trong giỏ hàng.');
+            }
+        });
+    });
+</script>
 {% endblock %}
