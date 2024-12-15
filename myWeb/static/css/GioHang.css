@@ -1,201 +1,164 @@
-/* tiếp tục mua sắm */
-.back {
-    margin: 10px 0 10px 0;
-}
-
-/* Item List */
-.cart-cont {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    padding-bottom: 15px;
-    gap: 10px;
-}
-
-.item-list {
-    border-radius: 15px;
-
-
-}
-  
-.checkbox-container {
-    padding: 10px 10px 10px 50px;
-    background-color: white;
-    border-radius: 10px 10px 0px 0px;
-    border-top: 1px solid gainsboro;
-    border-left: 1px solid gainsboro;
-    border-right: 1px solid gainsboro;
-}
-
- .checkbox-container label {
-    margin-left: 5px;
-    padding-right: 150px;
+ /* Box */
+ .box {
+     text-align: center;
  }
 
- input[type="checkbox"] {
-    margin: 0 10px 0 -20px;
-}
+ /* End Box */
 
-.checkbox-container .box:first-child{
-    margin-left: 34px;
-}
+ /* Item List */
+ .cart-cont {
+     display: grid;
+     grid-template-columns: 2fr 1fr;
+     padding-bottom: 15px;
+     gap: 10px;
+ }
 
-.checkbox-container div {
-    display: inline-block;
-    margin-left: 71px;
-    width:auto;
-}
+ .item-list {
+     border-radius: 15px;
+ }
 
-.item-card {
-    display: flex; 
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 10px 10px 50px;
-    border: 1px solid gainsboro;
-    background-color: white;
-    border-radius: 0; /* Không bo góc cho các thẻ thông thường */
-}
+ .checkbox-container {
+     padding: 10px;
+     background-color: white;
+     border-radius: 10px 10px 0px 0px;
+     border-top: 1px solid gainsboro;
+     border-left: 1px solid gainsboro;
+     border-right: 1px solid gainsboro;
+ }
 
-/* Áp dụng bo góc dưới cho item-card cuối cùng */
-.item-card:last-child {
-    border-bottom-left-radius: 10px; /* Bo góc dưới trái */
-    border-bottom-right-radius: 10px; /* Bo góc dưới phải */
-}
+ .checkbox-container input {
+     margin-left: 16px;
+ }
 
-input[type="checkbox"] {
-    margin-right: 0 30px 0 -30px;
-}
+ .checkbox-container label {
+     margin-left: 5px;
+     padding-right: 150px;
+ }
 
-.inner-name {
-    width: 300px;
-    padding: 0 10px 0 10px;
+ .item-card {
+     padding: 10px;
+     border: 1px solid gainsboro;
+     background-color: white;
+     border-radius: 0;
+     /* Không bo góc cho các thẻ thông thường */
+ }
 
-}
+ /* Áp dụng bo góc dưới cho item-card cuối cùng */
+ .item-card:last-child {
+     border-bottom-left-radius: 10px;
+     /* Bo góc dưới trái */
+     border-bottom-right-radius: 10px;
+     /* Bo góc dưới phải */
+ }
 
-.inner-price {
+ .inner-price {
+     color: brown;
+     text-align: center;
+     width: 100px;
+ }
 
-    color: #008DDC;
-    text-align: left;
-    width: 100px;
-}
+ .form-select {
+     margin: 0 -10px 0 20px;
+     text-align: left;
+     width: 100px;
+ }
 
-.del-btn {
-    background: none;
-}
+ /* End Item List*/
 
-.form-select {
-    margin: 0 -10px 0 20px;
-    text-align: left;
-    width: 100px;
-}
+ /* Quantity Selector */
 
-/* End Item List*/
+ .quantity-selector {
+     display: flex;
+     padding: 0px;
+     gap: 10px;
+     justify-content: space-between;
+     align-items: center;
+ }
 
-/* Quantity Selector */
+ .input-group .btn {
+     border-radius: 50%;
+     /* Bo tròn các nút */
+     width: 30px;
+     /* Đặt chiều rộng cho nút - và + */
+     height: 30px;
+     /* Đặt chiều cao cho nút - và + */
+     padding: 0;
+     /* Loại bỏ padding để nút không bị dãn ra */
+     background-color: ffffff;
+ }
 
-/* Loại bỏ các nút điều chỉnh mặc định trên tất cả trình duyệt */
-input[type="number"]::-webkit-inner-spin-button,
-input[type="number"]::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
+ .input-group input {
+     border-radius: 0;
+     /* Bỏ bo tròn cho input */
+     text-align: center;
+     /* Canh giữa nội dung */
+     padding: 0;
+     border-top: 1px solid gray;
+     border-bottom: 1px solid gray;
+     height: 30px;
+ }
 
-/* input[type="number"] {
-  -moz-appearance: textfield; Firefox
-*/
+ /* End of Quantity Selector */
 
-.quantity-selector {
-  display: flex;
-  padding: 0px;
-  gap: 10px;
-  justify-content:space-between;
-  align-items: center;
-}
+ /* Payment */
+ .bill {
+     background-color: white;
+     border-radius: 15px;
+     border: 1px solid ccc;
+     padding: 20px;
+     width: 400px;
+     text-align: center;
+ }
 
-.quantity-selector p {
-  margin: 0;
-  white-space: nowrap;
-}
+ .total {
+     padding: 10px;
+     display: flex;
+     justify-content: space-between;
+     font-size: 20px;
+     font-weight: bold;
+ }
 
-.input-group .btn {
-  border-radius: 50%; /* Bo tròn các nút */
-  width: 30px; /* Đặt chiều rộng cho nút - và + */
-  height: 30px; /* Đặt chiều cao cho nút - và + */
-  padding: 0; /* Loại bỏ padding để nút không bị dãn ra */
-  background-color: #ffffff;
-}
+ .total span {
+     color: brown;
+ }
 
-.input-group input {
-  border-radius: 0; /* Bỏ bo tròn cho input */
-  text-align: center; /* Canh giữa nội dung */
-  padding: 0;
-  border-top: 1px solid gray;
-  border-bottom: 1px solid gray;
-  height: 30px;
-}
+ .cart-btn {
+     width: 250px;
+ }
 
-#quantity {
-  width: 50px; /* Rút ngắn chiều rộng của input còn 50px */
-  text-align: center; /* Canh giữa nội dung */
-  padding: 0; /* Loại bỏ padding nếu có */
-}
+ .avatar-image {
+     width: 50px;
+     height: 50px;
+     object-fit: cover;
+     /* Đảm bảo ảnh được cắt để vừa khung */
+     border-radius: 5px;
+     /* (Tùy chọn) Bo góc nhẹ cho ảnh */
+     margin-right: 10px;
+ }
 
-/* End of Quantity Selector */
-
-/* Payment */
-
-.bill {
-    background-color: white;
-    border-radius: 15px;
-    border: 1px solid #ccc;
-    padding: 20px 16px 0 16px; 
-    width: 400px;
-    text-align: center;
-    height: 250px;
-}
-
-.price {
-    display: flex; 
-    justify-content: space-between;
-    padding: 10px 10px 0 10px;
-    font-size: 18px;
-}
-
-.total {
-    padding: 10px;
-    display: flex; 
-    justify-content: space-between;
-    border-top: 1px solid gainsboro;
-    font-size: 20px;
-    font-weight: bold;
-}
-
-.total span {
-    color: #008DDC;
-}
-
-.cart-btn {
-    width: 250px;
-}
-
-.avatar-image {
-    width: 50px;
-    height: 50px;
-    object-fit: cover; /* Đảm bảo ảnh được cắt để vừa khung */
-    border-radius: 5px; /* (Tùy chọn) Bo góc nhẹ cho ảnh */
-}
+ p {
+     margin-bottom: 0;
+ }
 
 
-.unit-type {
-    margin-left: 55px;
-}
-p {
-    margin-bottom: 0;
-}
-.empty-cart-message {
-    padding: 50px;
-    text-align: center;
-    font-size: 40px;
-}
-.inner-name a {
-    color: black;
-}
+ .empty-cart-message {
+     padding: 50px;
+     text-align: center;
+     font-size: 40px;
+ }
+
+ /* Align-item-center */
+ .align-item-center {
+     display: flex;
+     align-items: center;
+ }
+
+ /* End Align-item-center */
+
+ /* Justify-content-center */
+ .justify-content-center {
+     display: flex;
+     justify-content: center;
+ }
+
+ /* End Justify-content-center */

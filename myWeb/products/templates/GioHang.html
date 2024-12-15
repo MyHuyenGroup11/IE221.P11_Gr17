@@ -2,89 +2,98 @@
 
 {% load static %}
 {% block content %}
-    <link rel="stylesheet" href="{% static 'css/GioHang.css'%}">
-    <section class="bread-crumb">
-        <div class="container">
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{% url 'TrangChu' %}">Trang chủ</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Giỏ hàng</li>
-                </ol>
-            </nav>
-        </div>
-    </section>
-    
-    <section class="container">
-        {% if empty_cart_message %}
-            <p class="empty-cart-message">{{ empty_cart_message }}</p>
-        {% else %}
-            <div class="cart-cont">
-                <div class="item-list">
-                    <div class="checkbox-container">
+<link rel="stylesheet" href="{% static 'css/GioHang.css'%}">
+<section class="bread-crumb">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'TrangChu' %}">Trang chủ</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Giỏ hàng</li>
+            </ol>
+        </nav>
+    </div>
+</section>
+
+<section class="container">
+    {% if empty_cart_message %}
+    <p class="empty-cart-message">{{ empty_cart_message }}</p>
+    {% else %}
+    <div class="cart-cont">
+        <div class="item-list">
+            <div class="checkbox-container">
+                <div class="row">
+                    <div class="col-xl-6">
                         <input type="checkbox" id="selectAll">
                         <label for="selectAll">Chọn tất cả ({{ cart_items|length }})</label>
-                        <div>
-                            <div class="box">Giá thành</div>
-                            <div class="box">Số lượng</div>
-                            <div class="box">Đơn vị</div>                           
-                        </div>
                     </div>
-                   
-                    {% for item in cart_items %}
-                        <div class="item-card">
-                            <input type="checkbox" name="options" class="item-checkbox update-cart" 
-                               data-price="{{ item.cart_product.prod_price }}" 
-                               data-product="{{ item.cart_product.id }}" 
-                               data-action="select"
-                               {% if item.is_selected %}checked{% endif %}>  <!-- Thêm thuộc tính checked nếu sản phẩm được chọn -->
-                            
-                            <!-- Hiển thị ảnh đại diện của sản phẩm -->
-                            {% with images|default:'' as product_images %}
-                                {% for image in product_images %}
-                                    {% if image.product_id == item.cart_product.id %}
-                                        <img src="{{ image.url }}" alt="Avatar của {{ item.cart_product.prod_name }}" class="avatar-image">
-                                    {% endif %}
-                                {% endfor %}
-                            {% endwith %}
-                            
-                            
-                            <p class="inner-name">
-                                <a href="{% url 'product_detail' item.cart_product.prod_cate_lv1 item.cart_product.prod_cate_lv2 item.cart_product.prod_name %}">{{ item.cart_product.prod_name }}</a>
-                            </p>
-                            <p class="inner-price">{{ item.cart_product.prod_price_formatted }}đ</p>
-                            
-                            <div class="quantity-selector">
-                                <div class="input-group" style="max-width: 200px;">
-                                    <button class="btn btn-outline-secondary decrease update-cart" type="button" data-product ={{item.cart_product.id}} data-action = "remove">-</button>
-                                    <input type="number" class="form-control text-center quantity" 
-                                        value="{{ item.cart_product_quantity }}" min="1" max="100" readonly>
-
-                                    <button class="btn btn-outline-secondary increase update-cart" type="button" data-product ={{item.cart_product.id}} data-action = "add">+</button>
-                                </div>
-                            </div>
-                            
-                            <div class="unit-type">
-                                
-                                    <p>{{ item.cart_product.prod_unit_type }}</p>
-                                
-                            </div>                        
-                            <button data-product ={{item.cart_product.id}} data-action = "remove_all"  class="del-btn update-cart">                             
-                                <img src="{% static 'img/cart-order/del-item.png' %}" alt="Xóa sản phẩm">
-                            </button>
-                        </div>
-                    {% endfor %}
-                </div> 
-                <div class="bill">
-                    <p class="price">Tổng tiền <span id="total-price">0đ</span></p>
-                    <p class="price">Giảm giá <span>0đ</span></p>
-                    <p class="total">Thành tiền <span id="grand-total">0đ</span></p>     
-                    <a href="./cart_info.html"><button class="cart-btn">Mua hàng</button></a>
+                    <div class="col-xl-2">
+                        <div class="box">Giá tiền</div>
+                    </div>
+                    <div class="col-xl-2">
+                        <div class="box">Số lượng</div>
+                    </div>
+                    <div class="col-xl-2"></div>
                 </div>
             </div>
-        {% endif %}
-    </section>
-    
-    <script>
+
+
+            {% for item in cart_items %}
+            <div class="item-card">
+                <div class="row">
+                    <div class="col-xl-1 align-item-center justify-content-center">
+                        <input type="checkbox" name="options" class="item-checkbox"
+                            data-price="{{ item.cart_product.prod_price }}">
+                    </div>
+                    <!-- Hiển thị ảnh đại diện của sản phẩm -->
+                    <div class="col-xl-5 align-item-center">
+                        {% with images|default:'' as product_images %}
+                        {% for image in product_images %}
+                        {% if image.product_id == item.cart_product.id %}
+                        <a
+                            href="{% url 'product_detail' item.cart_product.prod_cate_lv1 item.cart_product.prod_cate_lv2 item.cart_product.prod_name %}">
+                            <img src="{{ image.url }}" alt="Avatar của {{ item.cart_product.prod_name }}"
+                                class="avatar-image">{{ item.cart_product.prod_name }}</a>
+                        {% endif %}
+                        {% endfor %}
+                        {% endwith %}
+                    </div>
+                    <div class="col-xl-2 align-item-center">
+                        <p class="inner-price">{{ item.cart_product.prod_price_formatted }}đ</p>
+                    </div>
+
+                    <div class="col-xl-2 align-item-center">
+                        <div class="quantity-selector">
+                            <div class="input-group" style="max-width: 200px;">
+                                <button class="btn btn-outline-secondary decrease update-cart" type="button"
+                                    data-product={{item.cart_product.id}} data-action="remove">-</button>
+                                <input type="number" class="form-control text-center quantity"
+                                    value="{{ item.cart_product_quantity }}" min="1" max="100" readonly>
+
+                                <button class="btn btn-outline-secondary increase update-cart" type="button"
+                                    data-product={{item.cart_product.id}} data-action="add">+</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-2 align-item-center justify-content-center">
+                        <button data-product={{item.cart_product.id}} data-action="remove_all"
+                            class="del-btn update-cart">
+                            Xóa
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="bill">
+            <p class="total">Tổng tiền <span id="grand-total">0đ</span></p>
+            <a href="./cart_info.html"><button class="cart-btn">Mua hàng</button></a>
+        </div>
+    </div>
+    {% endif %}
+</section>
+
+<script>
     // Cập nhật tổng tiền và thành tiền
     function updateTotal() {
         let total = 0;
@@ -103,7 +112,7 @@
     // Lắng nghe sự kiện chọn/dỡ bỏ chọn sản phẩm
     document.addEventListener('DOMContentLoaded', () => {
         updateTotal();
-        
+
         // Sự kiện chọn/dỡ bỏ chọn sản phẩm
         document.querySelectorAll('.item-checkbox').forEach(checkbox => {
             checkbox.addEventListener('change', updateTotal);
@@ -141,31 +150,28 @@
     });
 </script>
 
-    
-    <script>
-        // Lấy tất cả các nút tăng/giảm số lượng
-        const quantityInputs = document.querySelectorAll('.quantity');
-    
-        // Lắng nghe sự kiện thay đổi số lượng
-        quantityInputs.forEach(input => {
-            input.addEventListener('change', function() {
-                updateTotalItems();
-            });
+
+<script>
+    // Lấy tất cả các nút tăng/giảm số lượng
+    const quantityInputs = document.querySelectorAll('.quantity');
+
+    // Lắng nghe sự kiện thay đổi số lượng
+    quantityInputs.forEach(input => {
+        input.addEventListener('change', function () {
+            updateTotalItems();
         });
-    
-        // Cập nhật số lượng sản phẩm trong giỏ hàng
-        function updateTotalItems() {
-            const itemsCount = document.querySelectorAll('.quantity').length;
-            document.querySelector('label[for="selectAll"]').innerText = `Chọn tất cả (${itemsCount})`;
-        }
-    
-        // Khi trang load lần đầu tiên
-        document.addEventListener('DOMContentLoaded', updateTotalItems);
+    });
+
+    // Cập nhật số lượng sản phẩm trong giỏ hàng
+    function updateTotalItems() {
+        const itemsCount = document.querySelectorAll('.quantity').length;
+        document.querySelector('label[for="selectAll"]').innerText = `Chọn tất cả (${itemsCount})`;
+    }
+
+    // Khi trang load lần đầu tiên
+    document.addEventListener('DOMContentLoaded', updateTotalItems);
+</script>
 
 
-        
-    </script>
-    
-      
-    
+
 {% endblock %}
