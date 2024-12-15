@@ -361,3 +361,83 @@ def DangKy(request):
 def DangXuat(request):
     logout(request)
     return redirect('DangNhap')
+
+def DatHang(request):
+    customer = request.user  # Lấy thông tin người dùng đang đăng nhập
+    if not customer.is_authenticated:
+        return redirect('login')  # Chuyển hướng nếu người dùng chưa đăng nhập
+
+    selected_cart_items = Cart.objects.filter(cart_customer=customer, is_selected=True)
+
+    # Tạo context cho các sản phẩm được chọn và hình ảnh đại diện của sản phẩm
+    images_with_url = []
+    total_price = 0  # Tổng tiền phải trả
+
+    for cart_item in selected_cart_items:
+        product = cart_item.cart_product
+        quantity = cart_item.cart_product_quantity
+        price = product.prod_price
+
+        item_total_price = price * quantity
+        cart_item.item_total_price = "{:,.0f}".format(item_total_price)
+        total_price += item_total_price
+
+        # Định dạng giá sản phẩm
+        product.prod_price_formatted = "{:,.0f}".format(price)
+
+        avatar_image = Product_Image.objects.filter(prod_name=product, is_avatar=True).first()
+        if avatar_image:
+            images_with_url.append({
+                'product_id': product.id,
+                'url': avatar_image.ImageURL,
+                'is_avatar': avatar_image.is_avatar,
+            })
+
+    total_price_formatted = "{:,.0f}".format(total_price)
+
+    context = {
+        'cart_items': selected_cart_items,
+        'images': images_with_url,
+        'total_price': total_price_formatted,
+    }
+
+    if request.method == 'POST':
+        # Lấy thông tin nhận hàng từ POST request
+        full_name = request.POST.get('full_name')
+        phone_number = request.POST.get('phone_number')
+        address = request.POST.get('address')
+        payment_method = request.POST.get('payment_method')
+
+        if full_name and phone_number and address and payment_method:
+            # Tạo đơn hàng mới
+            order = Order(
+                order_customer=customer,
+                order_status='Đang xử lý',
+                order_total=total_price,
+                order_method=payment_method,
+                
+                order_receiver_name = full_name,
+                order_receiver_phone = phone_number,
+                order_adress = address,
+            )
+            order.save()
+
+            # Thêm các sản phẩm vào đơn hàng
+            for cart_item in selected_cart_items:
+                OrderItem.objects.create(
+                    order=order,
+                    product=cart_item.cart_product,
+                    quantity=cart_item.cart_product_quantity
+                )
+
+            # Xóa các sản phẩm đã được thêm vào đơn hàng khỏi giỏ hàng
+            selected_cart_items.delete()
+
+            # Hiển thị thông báo thành công
+            messages.success(request, "Đặt hàng thành công!")
+            return redirect('DonHangCuaToi')
+
+        else:
+            messages.error(request, "Vui lòng điền đầy đủ thông tin nhận hàng và chọn phương thức thanh toán.")
+
+    return render(request, 'DatHang.html', context)

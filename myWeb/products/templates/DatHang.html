@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/cart_info_style.css' %}">
+<section class="bread-crumb">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'TrangChu' %}">Trang chủ</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'GioHang' %}">Giỏ hàng</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Đặt hàng</li>
+            </ol>
+        </nav>
+    </div>
+</section>
+
+<section class="container">
+    <div class="cart-cont">
+        <div>
+            <p class="title">Danh sách sản phẩm</p>
+            <div class="item-list">
+                {% for item in cart_items %}
+                <div class="item-card">
+                    {% with images|default:'' as product_images %}
+                    {% for image in product_images %}
+                    {% if image.product_id == item.cart_product.id %}
+                    <img src="{{ image.url }}" alt="" class="avatar-image">
+                    {% endif %}
+                    {% endfor %}
+                    {% endwith %}
+                    <p class="inner-name">{{ item.cart_product.prod_name }}</p>
+                    <p class="inner-price">{{ item.item_total_price }}đ</p>
+                    <p class="qlt_unit">x{{ item.cart_product_quantity }} {{item.cart_product.prod_unit_type}}</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <aside class="bill">
+            <p class="total">Tổng tiền <span id="grand-total">{{ total_price }}đ</span></p>
+            <button class="cart-btn" id="checkout-button" type="button">Mua hàng</button>
+        </aside>
+
+        <div>
+            <p class="title">Thông tin nhận hàng</p>
+            <form method="POST" id="order-form">
+                {% csrf_token %}
+                <div class="ship-info">
+                    <input class="fill-in" type="text" name="full_name" placeholder="Họ và tên người nhận" required>
+                    <input class="fill-in" type="text" name="phone_number" placeholder="Số điện thoại người nhận" required>
+                    <div><input class="fill-in" type="text" name="address" placeholder="Địa chỉ" required></div>
+                </div>
+
+                <div>
+                    <p class="title">Chọn phương thức thanh toán</p>
+                    <div class="type">
+                        <div>
+                            <input type="radio" name="payment_method" value="Thanh toán tiền mặt khi nhận hàng" required>
+                            <img src="{% static 'img/cart-order/cash.png' %}" alt="">
+                            <p>Thanh toán tiền mặt khi nhận hàng</p>
+                        </div>
+                        <div>
+                            <input type="radio" name="payment_method" value="Thanh toán bằng thẻ ATM nội địa và tài khoản ngân hàng" required>
+                            <img src="{% static 'img/cart-order/atm.png' %}" alt="">
+                            <p>Thanh toán bằng thẻ ATM nội địa và tài khoản ngân hàng</p>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</section>
+
+<script>
+   document.getElementById('checkout-button').addEventListener('click', function(event) {
+    // Lấy giá trị các trường thông tin nhận hàng
+    const fullName = document.querySelector('input[name="full_name"]').value.trim();
+    const phoneNumber = document.querySelector('input[name="phone_number"]').value.trim();
+    const address = document.querySelector('input[name="address"]').value.trim();
+    const paymentMethods = document.querySelectorAll('input[name="payment_method"]');
+    let paymentMethodSelected = false; // Flag để kiểm tra xem có phương thức thanh toán được chọn hay không
+
+    // Kiểm tra mỗi trường nhập thông tin nhận hàng
+    let errorMessage = "";
+    if (!fullName) {
+        errorMessage += "Vui lòng nhập họ và tên người nhận.\n";
+    }
+
+    if (!phoneNumber) {
+        errorMessage += "Vui lòng nhập số điện thoại người nhận.\n";
+    }
+
+    if (!address) {
+        errorMessage += "Vui lòng nhập địa chỉ.\n";
+    }
+
+    // Kiểm tra xem có phương thức thanh toán nào được chọn không
+    for (const method of paymentMethods) {
+        if (method.checked) {
+            paymentMethodSelected = true;
+            break;
+        }
+    }
+
+    if (!paymentMethodSelected) {
+        errorMessage += "Vui lòng chọn phương thức thanh toán.\n";
+    }
+
+    if (errorMessage) {
+        // Hiển thị alert với các lỗi và ngăn form submit
+        alert(errorMessage);
+        event.preventDefault();  
+    } else {
+        alert('Đã tạo đơn hàng thành công');
+        document.getElementById('order-form').submit();  // Submit form nếu không có lỗi
+    }
+});
+</script>
+
+
+
+{% endblock %}
