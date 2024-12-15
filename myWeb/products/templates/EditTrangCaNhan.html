@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% block content %}
+    <link rel="stylesheet" href="{% static 'css/EditTrangCaNhan.css'%}">
+   
+    <section class="bread-crumb">
+        <div class="container">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'TrangChu' %}">Trang chủ</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'TrangCaNhan' %}">Thông tin cá nhân</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Sửa</li>
+                </ol>
+            </nav>
+        </div>
+    </section>
+
+    <section class="edit-profile">
+        <div class="container">
+            <div class="profile-card">
+                <h2>Thông tin cá nhân</h2>
+                <hr />
+                <form method="POST" action="{% url 'EditTrangCaNhan' %}" id="edit-profile-form">
+                    {% csrf_token %}
+                    <div class="profile-avatar">
+                        <img src="{% static 'image/Trang cá nhân/avatar.jpg'%}" alt="Avatar">
+                    </div>
+                    <div class="profile-details">
+                        <div class="form-group mb-3">
+                            <label for="username">Tên người dùng</label>
+                            <input type="text" id="username" name="username" class="form-control" value="{{ user.username }}" required>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="last-name">Họ</label>
+                            <input type="text" id="last-name" name="last_name" class="form-control" value="{{ user.last_name }}" required>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="first-name">Tên</label>
+                            <input type="text" id="first-name" name="first_name" class="form-control" value="{{ user.first_name }}" required>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" class="form-control" value="{{ user.email }}" required>
+                        </div>
+                    </div>
+                    <div class="edit-button">
+                        <button type="submit" class="btn-primary">Cập nhật thông tin</button>
+                    </div>
+                </form>
+                {% if messages %}
+                <div class="alert-messages">
+                    {% for message in messages %}
+                        <div class="alert  alert-danger">{{ message }}</div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+{% endblock %}

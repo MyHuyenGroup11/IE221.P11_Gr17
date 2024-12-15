@@ -1,10 +1,15 @@
 import json
+from django.forms import ValidationError
 from django.shortcuts import get_object_or_404, redirect, render
 from django.http import HttpResponse, JsonResponse
 from .models import *
 from django.core.paginator import Paginator
-from django.contrib.auth import authenticate,login,logout
+from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
+from django.http import JsonResponse
+from django.contrib.auth.models import User
+from django.core.validators import validate_email
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 def TrangChu(request):
@@ -478,3 +483,51 @@ def DonHangCuaToi(request):
     }
 
     return render(request, 'DonHangCuaToi.html', context)
+
+def TrangCaNhan(request):
+    customer = request.user
+    context = { 
+        'customer': customer
+        }
+    return render(request,'TrangCaNhan.html',context)
+
+@login_required
+def EditTrangCaNhan(request):
+    if request.method == 'POST':
+        user = request.user
+        new_username = request.POST.get('username')
+        new_first_name = request.POST.get('first_name')
+        new_last_name = request.POST.get('last_name')
+        new_email = request.POST.get('email')
+
+        # Kiểm tra các trường không được để trống
+        if not new_username or not new_first_name or not new_last_name or not new_email:
+            messages.error(request, "Vui lòng không bỏ trống bất kỳ trường nào!")
+            return render(request, 'EditTrangCaNhan.html')
+
+        # Kiểm tra địa chỉ email hợp lệ
+        try:
+            validate_email(new_email)
+        except ValidationError:
+            messages.error(request, "Địa chỉ email không hợp lệ!")
+            return render(request, 'EditTrangCaNhan.html')
+
+        # Kiểm tra xem username đã tồn tại chưa
+        if User.objects.filter(username=new_username).exclude(id=user.id).exists():
+            messages.error(request, "Tên người dùng đã được sử dụng!")
+            return render(request, 'EditTrangCaNhan.html')
+
+        # Kiểm tra xem email đã tồn tại chưa
+        if User.objects.filter(email=new_email).exclude(id=user.id).exists():
+            messages.error(request, "Email đã được sử dụng bởi tài khoản khác!")
+            return render(request, 'EditTrangCaNhan.html')
+
+        # Lưu thông tin mới vào cơ sở dữ liệu
+        user.username = new_username
+        user.first_name = new_first_name
+        user.last_name = new_last_name
+        user.email = new_email
+        user.save()
+        return redirect('TrangCaNhan')
+
+    return render(request, 'EditTrangCaNhan.html')

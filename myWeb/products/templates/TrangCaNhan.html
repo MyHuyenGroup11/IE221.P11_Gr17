@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% block content %}
+    <link rel="stylesheet" href="{% static 'css/TrangCaNhan.css'%}">
+
+    <section class="bread-crumb">
+        <div class="container">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'TrangChu' %}">Trang chủ</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Thông tin cá nhân</li>
+                </ol>
+            </nav>
+        </div>
+    </section>
+
+    <section class="profile-info">
+        <div class="container">
+            <div class="profile-card">
+    
+                <h2>Thông tin cá nhân</h2>
+                <hr/>
+
+                    <div class="profile-avatar">
+                        <img src="{% static 'image/Trang cá nhân/avatar.jpg'%}" alt="Avatar">
+                    </div>
+                    <div class="profile-details">
+                        <div class="detail-item">
+                            <span>Tên đăng nhập</span>
+                            <p>{{ customer.username }}</p>
+                        </div>
+                        <hr/>
+                        <div class="detail-item">
+                            <span>Họ</span>
+                            <p>{{ customer.last_name }}</p>
+                        </div>
+                        <hr/>
+                        <div class="detail-item">
+                            <span>Tên</span>
+                            <p>{{ customer.first_name}}</p>
+                        </div>
+                        <hr/>
+                        <div class="detail-item">
+                            <span>Email</span>
+                            <p>{{ customer.email}}</p>
+                        </div>
+                        <hr/>
+                    </div>
+                
+                <div class="edit-button">
+                    <button onclick="window.location.href = '{% url 'EditTrangCaNhan' %}'">Chỉnh sửa thông tin</button>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

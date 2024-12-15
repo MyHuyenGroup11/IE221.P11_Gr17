@@ -1,0 +1,92 @@
+.edit-profile{
+    padding-bottom: 15px;
+}
+
+/* Profile Card Styling */
+.edit-profile .container {
+    width: 80%;
+    margin: auto;
+}
+
+.profile-card {
+    background: #fff;
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin: 0px 200px;
+    width: 800px;
+}
+
+.profile-card h2 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: black;
+    font-weight: bold;
+
+}
+.profile-avatar {
+    flex: 1;
+    text-align: center;
+}
+
+.profile-avatar img {
+    width: 64px;
+    height: 64px;
+}
+.profile-details {
+    flex: 3;
+}
+.form-label {
+    
+    font-size: 14px;
+    color: #333;
+}
+.profile-details {
+    padding: 10px 140px;
+}
+
+.form-control {
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    width: 500px;
+    
+}
+
+.form-control:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.25);
+}
+
+.btn-primary {
+    font-weight: bold;
+    background-color: #008DCC;
+    color: white;
+    padding: 10px 70px;
+    border: none;
+    border-radius: 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+    
+}
+.edit-button {
+    text-align: center;
+    margin-top: 0px;
+    padding-bottom: 15px;
+}
+
+
+
+.form-check-label {
+    font-size: 14px;
+    color: #333;
+}
+
+hr{
+    margin-top:-5px;
+}
+label{
+    font-size: 14px;
+}

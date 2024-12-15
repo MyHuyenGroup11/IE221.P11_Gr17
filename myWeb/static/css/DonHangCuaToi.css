@@ -1,7 +1,4 @@
-
-
 /* Order Container*/
-
 .order-cont {
     display: grid;
     gap: 10px;
@@ -34,43 +31,26 @@
     width: 1300px;
 }
 
-/* .order-cont li:nth-child(1) a {
-    border-bottom: 1px solid #008DDC;
-    border-width: thick;
-    padding-bottom: 5px;
-  } */
-
 .order-cont ul li a{
     font-size: large;
     font-weight: bold;
     color:black;    
+
 }
 
-.item-card, .item-card2 {
+.item-card {
     border: 1px solid #ccc;
     border-radius: 15px;
     text-align: right;
     background-color: white;
 }
 
-.item-card2 {
-    display: none;
-}
-
 .box p:first-child {
     font-weight: bold;
 }
 
-.item-card .box, .item-card2 .box {
-    padding: 0 70px 0 70px;
-}
-
 .inner-name {
     color: #5eaa55
-}
-
-.item-card2 .inner-name {
-    color: crimson;
 }
 
 .item-info {
@@ -86,22 +66,18 @@
 }
 
 .item-info .inner-price {
-    color: black;
-}
-
-.item-info div {
-    display: flex; 
-    justify-content: space-between;    
+    color: brown;
 }
 
 .item-info div{
-
+    display: flex; 
+    justify-content: space-between;   
     align-items: center;
-    padding: 10px 80px 0px 80px;
+    padding: 10px 80px;
 }
 
 .inner-price {
-    color: #008DDC;
+    color: brown;
     padding-left: 10px;
 }
 

@@ -66,12 +66,12 @@
                                     <div class="dropdown-content">
                                         <ul>
                                             <li>
-                                                <a href="#">
+                                                <a href="{% url 'TrangCaNhan' %}">
                                                     Thông tin cá nhân
                                                 </a>
                                             </li>
                                             <li>
-                                                <a href="{% url 'DonHangCuaToi'%}">
+                                                <a href="{% url 'DonHangCuaToi' %}">
                                                     Đơn hàng của tôi
                                                 </a>
                                             </li>
@@ -235,6 +235,22 @@
         // Gán placeholder cho password1 và password2
         password1Field.setAttribute('placeholder', 'Nhập mật khẩu');
         password2Field.setAttribute('placeholder', 'Nhập lại mật khẩu');
+    });
+
+    // 5. Kiểm tra xem có chọn sản phẩm chưa trước khi tạo đơn hàng
+    document.addEventListener('DOMContentLoaded', function () {
+        const checkoutButton = document.getElementById('DatHang');
+        const itemCheckboxes = document.querySelectorAll('.item-checkbox');
+
+        checkoutButton.addEventListener('click', function (event) {
+            // Kiểm tra nếu không có checkbox nào được chọn
+            const isAnyItemSelected = Array.from(itemCheckboxes).some(checkbox => checkbox.checked);
+            
+            if (!isAnyItemSelected) {
+                event.preventDefault(); // Ngăn không cho điều hướng
+                alert('Bạn chưa chọn sản phẩm nào trong giỏ hàng.');
+            }
+        });
     });
 
 </script>
