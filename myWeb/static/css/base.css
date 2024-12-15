@@ -145,7 +145,6 @@ nav .dropdown-content ul {
 
 nav .dropdown-content ul li {
     width: 100%;
-    text-align: left;
 }
 
 nav .dropdown-content ul li:hover {
@@ -158,6 +157,7 @@ nav .dropdown-content ul li a {
     padding: 0px;
     width: 100%;
     display: flex;
+    text-align: center;
 }
 
 nav .dropdown-content ul li a img {

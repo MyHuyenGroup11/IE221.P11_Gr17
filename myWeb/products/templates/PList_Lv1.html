@@ -22,7 +22,6 @@
 
 <section class="categories"> 
     <div class="container">
-        <h1>{{ cate_lv1.cate_1 }}</h1>
         <div class="grid">
             {% for category in categories_lv2 %}
             <a href="{% url 'categories_lv2' cate_lv1.cate_1 category.cate_2 %}">
@@ -52,7 +51,7 @@
                     </div>
                 </div>
             </div>
-            <div class="filter-and-product-cards">
+            <div class="product-cards">
                 <div class="container">
                     <div class="product-cards">
                         <div class="grid" id="product-list">

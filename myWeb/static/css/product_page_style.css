@@ -112,76 +112,13 @@
     width: 100%;
     padding: 8px 16px;
 }
+
 .price {
     font-size: 16px;
-    
     font-weight: bold;
-   
     color: brown;
-    
     margin: 2px 0;
-   
 }
-
-.rate,
-.sold {
-    margin-bottom: auto;
-
-    font-size: 14px;
-    color: rgb(91, 91, 91);
-    margin: 0 4px;
-}
-
-.fa-heart {
-    color: rgb(91, 91, 91);
-    margin-right: 4px;
-}
-
-.vertical-line {
-    margin-bottom: auto;
-    margin-top: -1px;
-    font-size: 14px;
-    color: rgb(91, 91, 91);
-    margin: none;
-}
-
-.price del {
-    color: rgb(91, 91, 91);
-    min-height: 1em; /* Điều chỉnh chiều cao tối thiểu để giữ dòng trống */
-    display: inline-block; /* Đảm bảo `del` có thể áp dụng chiều cao */
-}
-
-
-/* Filter */
-.filter {
-    background-color: white;
-    border-radius: 15px;
-    border: 1px solid #ccc; 
-    padding: 0 16px 0 16px; 
-    width: 319px;
-    height: 250px;
-    /* position: sticky;
-    top: 10px; */
-}
-
-.filter h1 {
-    font-size: 18px;
-    padding: 16px 0 16px 0;
-    margin-bottom: 0;
-}
-.filter .fa {
-    margin-right: 10px;
-}
-
-.filter h2 {
-    font-size: 16px;
-}
-
-.filter-by-price, .filter-by-brand {
-    padding: 16px 0 16px 0;
-    border-top: 1px solid gainsboro;
-}
-
 
 /* Product List */
 .product-cards .grid {
@@ -214,8 +151,6 @@
     margin-bottom: 5px;
 }
 
-
-
 /* Styles for sorting buttons */
 .sort button {
     background-color: white;
@@ -236,14 +171,6 @@
     background-color: #fff;
     color: #FFD580;
     border-color: #FFD580;
-}
-
-.result {
-    padding-top: 20px;
-}
-
-.alert-warning {
-    margin-bottom: 300px;
 }
 
 /* Breadcrumb  */

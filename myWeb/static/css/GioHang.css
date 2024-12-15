@@ -2,7 +2,6 @@
  .box {
      text-align: center;
  }
-
  /* End Box */
 
  /* Item List */
@@ -66,7 +65,6 @@
  /* End Item List*/
 
  /* Quantity Selector */
-
  .quantity-selector {
      display: flex;
      padding: 0px;
@@ -97,7 +95,6 @@
      border-bottom: 1px solid gray;
      height: 30px;
  }
-
  /* End of Quantity Selector */
 
  /* Payment */
@@ -140,7 +137,6 @@
      margin-bottom: 0;
  }
 
-
  .empty-cart-message {
      padding: 50px;
      text-align: center;
@@ -152,7 +148,6 @@
      display: flex;
      align-items: center;
  }
-
  /* End Align-item-center */
 
  /* Justify-content-center */
@@ -160,5 +155,4 @@
      display: flex;
      justify-content: center;
  }
-
  /* End Justify-content-center */
