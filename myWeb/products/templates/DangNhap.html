@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'css/form.css' %}">
+<section class="container">
+    <div id="wrapper">
+        <form action="" id="form-login" method="POST">
+            {% csrf_token %}
+            <h1 class="form-heading">Đăng nhập</h1>
+            <div class="form-group">
+                <i class="fa-solid fa-phone"></i>
+                <input type="text" name="username" class="form-input" placeholder="Số điện thoại">
+            </div>
+            <div class="form-group">
+                <i class="fa-solid fa-key"></i>
+                <input type="password" name="password" class="form-input" placeholder="Mật khẩu">
+            </div>
+            <input type="submit" value="Đăng nhập" class="form-submit">
+            <div class="btn-form">
+                <a class="forget-password" href="#">Quên mật khẩu?</a>
+                <a class="no-account" href="{% url 'DangKy' %}">Chưa có tài khoản?</a>
+            </div>
+        </form>
+    </div>
+</section>
+
+
+<script>
+    document.getElementById('form-login').addEventListener('submit', function(e) {
+        e.preventDefault(); // Ngăn form tải lại trang
+    
+        const formData = new FormData(this);
+    
+        fetch('', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert(data.message); // Hiển thị thông báo thành công
+                window.location.href = "{% url 'TrangChu' %}"; // Chuyển hướng đến trang chủ
+            } else {
+                alert(data.message); // Hiển thị thông báo lỗi
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Đã xảy ra lỗi, vui lòng thử lại!');
+        });
+    });
+</script>
+    
+
+{% endblock %}

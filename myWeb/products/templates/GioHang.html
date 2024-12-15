@@ -23,8 +23,8 @@
             <div class="checkbox-container">
                 <div class="row">
                     <div class="col-xl-6">
-                        <input type="checkbox" id="selectAll">
-                        <label for="selectAll">Chọn tất cả ({{ cart_items|length }})</label>
+                        
+                        <label for="selectAll">Số món ăn: {{ cart_items|length }}</label>
                     </div>
                     <div class="col-xl-2">
                         <div class="box">Giá tiền</div>
@@ -41,8 +41,11 @@
             <div class="item-card">
                 <div class="row">
                     <div class="col-xl-1 align-item-center justify-content-center">
-                        <input type="checkbox" name="options" class="item-checkbox"
-                            data-price="{{ item.cart_product.prod_price }}">
+                        <input type="checkbox" name="options" class="item-checkbox update-cart" 
+                               data-price="{{ item.cart_product.prod_price }}" 
+                               data-product="{{ item.cart_product.id }}" 
+                               data-action="select"
+                               {% if item.is_selected %}checked{% endif %}>  <!-- Thêm thuộc tính checked nếu sản phẩm được chọn -->
                     </div>
                     <!-- Hiển thị ảnh đại diện của sản phẩm -->
                     <div class="col-xl-5 align-item-center">
@@ -86,7 +89,7 @@
             {% endfor %}
         </div>
         <div class="bill">
-            <p class="total">Tổng tiền <span id="grand-total">0đ</span></p>
+            <p class="total">Tổng tiền <span id="grand-total">{{total_selected_price}}đ</span></p>
             <a href="./cart_info.html"><button class="cart-btn">Mua hàng</button></a>
         </div>
     </div>
@@ -165,7 +168,7 @@
     // Cập nhật số lượng sản phẩm trong giỏ hàng
     function updateTotalItems() {
         const itemsCount = document.querySelectorAll('.quantity').length;
-        document.querySelector('label[for="selectAll"]').innerText = `Chọn tất cả (${itemsCount})`;
+        document.querySelector('label[for="selectAll"]').innerText = `Số món ăn: ${itemsCount}`;
     }
 
     // Khi trang load lần đầu tiên

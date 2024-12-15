@@ -67,19 +67,19 @@
                                         <ul>
                                             <li>
                                                 <a href="#">
-                                                    <img src="{% static '' %}" alt="" class="img-fluid" style="width: 22px; height: 22px;">
+                                                    
                                                     Thông tin cá nhân
                                                 </a>
                                             </li>
                                             <li>
                                                 <a href="#">
-                                                    <img src="{% static '' %}" alt="" class="img-fluid" style="width: 22px; height: 22px;">
+                                                    
                                                     Đơn hàng của tôi
                                                 </a>
                                             </li>
                                             <li>
-                                                <a href="#" id="logout-link">
-                                                    <img src="{% static '' %}" alt="" class="img-fluid" style="width: 22px; height: 22px;">
+                                                <a href="{% url 'DangXuat' %}" id="logout-link">
+                                                    
                                                     Đăng xuất
                                                 </a>
                                             </li>
@@ -168,9 +168,12 @@
     
         popupButtons.forEach(button => {
             button.addEventListener('click', () => {
-            
+                if (user === "AnonymousUser") {
+                    // Không làm gì cả nếu chưa đăng nhập hoặc có thể dẫn qua trang đăng nhập
+                    
+                } else {
                     showPopup();
-                
+                }
             });
         });
     
@@ -227,6 +230,16 @@
                 console.error('Lỗi khi gửi yêu cầu:', error);
             });
     }
+
+    // 4. Gắn thuộc tính placeholder bằng js vì model không truyền thuộc tính vào được 
+    document.addEventListener('DOMContentLoaded', function() {
+        const password1Field = document.getElementById('id_password1');
+        const password2Field = document.getElementById('id_password2');
+    
+        // Gán placeholder cho password1 và password2
+        password1Field.setAttribute('placeholder', 'Nhập mật khẩu');
+        password2Field.setAttribute('placeholder', 'Nhập lại mật khẩu');
+    });
 
 </script>
 

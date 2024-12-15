@@ -1,0 +1,115 @@
+#wrapper{
+    min-height: 77vh; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+#wrapper #form-login{
+    max-width: 400px;
+    background: rgba(0, 0, 0, 0);
+    flex-grow: 1;
+    padding: 30px;
+    border: 1px solid black;
+    border-radius: 20px;
+    background-color: white;
+}
+
+#wrapper #form-register{
+    max-width: 400px;
+    background: rgba(0, 0, 0, 0);
+    flex-grow: 1;
+    padding: 30px;
+    border: 1px solid black;
+    border-radius: 20px;
+    background-color: white;
+}
+
+#wrapper .form-heading{
+    font-size: 25px;
+    color: black;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+#wrapper .form-group{
+    border-bottom: 1px solid black;
+    margin-top: 15px;
+    /* margin-bottom: 20px; */
+    display: flex;
+}
+
+#wrapper .form-input{
+    background: transparent;
+    border: 0;
+    outline: 0;
+    color: black;
+    flex-grow: 1;
+    margin-left: 10px;
+}
+
+#wrapper .form-input::placeholder{
+    color: #A9A9A9;
+}
+
+#wrapper .form-submit{
+    background: transparent;
+    border: 1px solid black;
+    color: white;
+    width: 100%;
+    text-transform: uppercase;
+    padding: 6px 10px;
+    transition: 0.25s ease-in-out;
+    margin-top: 30px;
+    background: linear-gradient(45deg, #E86C3C, #FF8C42);
+    cursor: pointer;
+}
+
+#wrapper input {
+    border-radius: 20px;
+}
+
+#wrapper a {
+    text-decoration: none;
+}
+
+#wrapper a:hover {
+    text-decoration: underline;
+}
+
+#wrapper .forget-password {
+    color: #808080
+}
+
+#wrapper .no-account {
+    color: brown;
+}
+
+#wrapper .btn-form {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+}
+
+.have-account {
+    margin-bottom: 0px;
+}
+
+#id_password1, #id_password2 {
+    background: transparent;
+    border: 0;
+    outline: 0;
+    color: black;
+    flex-grow: 1;
+    margin-left: 10px;
+}
+
+#id_password1::placeholder{
+    color: #A9A9A9;
+}
+
+#id_password2::placeholder{
+    color: #A9A9A9;
+}
+

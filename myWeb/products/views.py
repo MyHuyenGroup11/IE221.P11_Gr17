@@ -3,6 +3,9 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.http import HttpResponse, JsonResponse
 from .models import *
 from django.core.paginator import Paginator
+from django.contrib.auth import authenticate,login,logout
+from django.contrib import messages
+
 # Create your views here.
 def TrangChu(request):
     # Lấy 6 món ăn
@@ -265,6 +268,9 @@ def GioHang(request):
                     'is_avatar': avatar_image.is_avatar,
                 })
 
+    total_selected_price = "{:,.0f}".format(Cart.calculate_selected_total(customer))   # Tính tổng tiền các sản phẩm được chọn
+
+    
     # Kiểm tra giỏ hàng có rỗng hay không
     if not cart_items:
         empty_cart_message = "Bạn chưa bỏ gì vào giỏ hàng"
@@ -275,6 +281,7 @@ def GioHang(request):
         'cart_items': cart_items,
         'images': images_with_url,
         'empty_cart_message': empty_cart_message,  # Thêm thông báo nếu giỏ hàng trống
+        'total_selected_price': total_selected_price,
     }
     return render(request, 'GioHang.html', context)
 
@@ -314,3 +321,43 @@ def updateItem(request):
         cart_item.save()
 
     return JsonResponse('Món ăn đã được cập nhật', safe=False)
+
+
+def DangNhap(request):
+    # Nếu đã được đăng nhập rồi thì trở lại trang chủ
+    if request.user.is_authenticated:
+        return redirect('TrangChu')
+
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            login(request, user)
+            return JsonResponse({'success': True, 'message': 'Đăng nhập thành công!', 'redirect_url': 'TrangChu'})
+        else:
+            return JsonResponse({'success': False, 'message': 'Tên đăng nhập hoặc mật khẩu chưa đúng'})
+
+    return render(request, 'DangNhap.html')
+
+def DangKy(request):
+    if request.method == 'POST':
+        form = CreateUserForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return JsonResponse({'success': True, 'message': 'Đăng ký thành công!'})
+        else:
+            # Trả về các lỗi dạng JSON
+            errors = {field: error.get_json_data() for field, error in form.errors.items()}
+            return JsonResponse({'success': False, 'errors': errors})
+    else:
+        form = CreateUserForm()
+
+    context = {'form': form}
+    return render(request, 'DangKy.html', context)
+
+
+def DangXuat(request):
+    logout(request)
+    return redirect('DangNhap')
