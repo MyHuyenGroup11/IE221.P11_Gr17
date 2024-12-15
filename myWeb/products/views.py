@@ -1,5 +1,6 @@
+import json
 from django.shortcuts import get_object_or_404, redirect, render
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from .models import *
 from django.core.paginator import Paginator
 # Create your views here.
@@ -154,10 +155,10 @@ def ChiTietSanPham(request, cate_lv1_name, cate_lv2_name, product_name):
     cate_lv1 = get_object_or_404(Category_lv1, cate_1=cate_lv1_name)
     cate_lv2 = get_object_or_404(Category_lv2, cate_2=cate_lv2_name, cate_1=cate_lv1)
 
-    # Lấy sản phẩm
+    # Lấy món ăn
     product = get_object_or_404(Product, prod_name=product_name, prod_cate_lv1=cate_lv1, prod_cate_lv2=cate_lv2)
 
-    # Lấy danh sách ảnh của sản phẩm
+    # Lấy danh sách ảnh của món ăn
     images = Product_Image.objects.filter(prod_name=product)
     images_with_url = [{'url': img.ImageURL, 'is_avatar': img.is_avatar} for img in images]
     
@@ -197,7 +198,7 @@ def TimKiem(request):
             }
             return render(request, 'TimKiem.html', context)
         else:
-            # Lấy sản phẩm và gắn URL của ảnh avatar vào từng sản phẩm
+            # Lấy món ăn và gắn URL của ảnh avatar vào từng món ăn
             for product in keys:
                 avatar = Product_Image.objects.filter(prod_name=product, is_avatar=True).first()
                 product.avatar_url = avatar.ImageURL if avatar else None
@@ -205,7 +206,7 @@ def TimKiem(request):
                 # Định dạng giá
                 product.prod_price_formatted = "{:,.0f}".format(product.prod_price)
 
-            # Phân trang với 12 sản phẩm mỗi trang
+            # Phân trang với 12 món ăn mỗi trang
             paginator = Paginator(keys, 12)
             page_number = request.GET.get('page')
             page_obj = paginator.get_page(page_number)
@@ -242,10 +243,10 @@ def GioHang(request):
 
     if request.user.is_authenticated:
         customer = request.user
-        # Lấy tất cả các sản phẩm trong giỏ hàng có tên của khách hàng hiện tại
+        # Lấy tất cả các món ăn trong giỏ hàng có tên của khách hàng hiện tại
         cart_items = Cart.objects.filter(cart_customer=customer)
 
-        # Duyệt qua từng sản phẩm để lấy ảnh đại diện và định dạng giá
+        # Duyệt qua từng món ăn để lấy ảnh đại diện và định dạng giá
         for cart_item in cart_items:
             product = cart_item.cart_product
 
@@ -276,3 +277,40 @@ def GioHang(request):
         'empty_cart_message': empty_cart_message,  # Thêm thông báo nếu giỏ hàng trống
     }
     return render(request, 'GioHang.html', context)
+
+
+def updateItem(request):
+    data = json.loads(request.body)
+    productId = data['productId']
+    action = data['action']
+
+    customer = request.user
+    product = Product.objects.get(id=productId)
+
+    # Lấy món ăn trong giỏ hàng hoặc tạo mới nếu chưa có
+    cart_item, created = Cart.objects.get_or_create(
+        cart_customer=customer,
+        cart_product=product
+    )
+
+    if action == 'select':
+        cart_item.is_selected = not cart_item.is_selected  # Đảo trạng thái của is_selected
+    elif action == 'add':
+        if created:
+            cart_item.cart_product_quantity = 1  # Nếu tạo mới, gán số lượng là 1
+        else:
+            cart_item.cart_product_quantity += 1  # Nếu đã tồn tại, tăng số lượng
+    elif action == 'remove':
+        cart_item.cart_product_quantity -= 1
+        # Xóa món ăn nếu số lượng <= 0
+        if cart_item.cart_product_quantity <= 0:
+            cart_item.delete()
+    elif action == 'remove_all':
+        # Xóa món ăn bất kể số lượng
+        cart_item.delete()
+
+    # Lưu món ăn nếu không bị xóa
+    if action in ['add', 'remove','select'] and cart_item.cart_product_quantity > 0:
+        cart_item.save()
+
+    return JsonResponse('Món ăn đã được cập nhật', safe=False)

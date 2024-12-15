@@ -213,3 +213,53 @@ nav .dropdown:hover .dropdown-content {
     z-index: 999;
     display: none;
 }
+/* dropdown cá nhân */
+.customer .dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.customer .dropdown-content {
+    display: none;
+    position: absolute;
+    border-radius: 10px;
+    background-color: white;
+    width: 210px; 
+    height: 150px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    right: -40px;
+    z-index: 3;
+    padding: 10px;
+}
+
+.customer .dropdown-content ul li:hover {
+    background-color: var(--background-color1);
+}
+
+.customer .dropdown-content a {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    color: black;
+}
+
+.customer .dropdown-content img {
+    margin-right: 10px;
+}
+
+.customer .dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/* End dropdown cá nhân */
+
+/* Carousel */
+/* #carouselExampleCaptions {
+    /* Đặt chiều cao tối đa */
+     /* Ẩn phần hình ảnh bị tràn */
+/*}*/
+  
+  #carouselExampleCaptions img {
+    height: 400px; /* Đảm bảo hình ảnh chiếm đủ chiều cao */
+    object-fit: cover; /* Cắt hình ảnh để vừa với carousel */
+  }

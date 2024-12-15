@@ -32,7 +32,11 @@
                    
                     {% for item in cart_items %}
                         <div class="item-card">
-                            <input type="checkbox" name="options" class="item-checkbox" data-price="{{ item.cart_product.prod_price }}">
+                            <input type="checkbox" name="options" class="item-checkbox update-cart" 
+                               data-price="{{ item.cart_product.prod_price }}" 
+                               data-product="{{ item.cart_product.id }}" 
+                               data-action="select"
+                               {% if item.is_selected %}checked{% endif %}>  <!-- Thêm thuộc tính checked nếu sản phẩm được chọn -->
                             
                             <!-- Hiển thị ảnh đại diện của sản phẩm -->
                             {% with images|default:'' as product_images %}
