@@ -236,10 +236,43 @@ def TimKiem(request):
         }
         return render(request, 'TimKiem.html', context)
 
-def product_detail(request, prod_cate_lv1, prod_cate_lv2, prod_name):
-    product = Product.objects.get(
-        prod_cate_lv1=prod_cate_lv1, 
-        prod_cate_lv2=prod_cate_lv2, 
-        prod_name=prod_name
-    )
-    return render(request, 'ChiTietSanPham.html', {'product': product})
+def GioHang(request):  
+    cart_items = []
+    images_with_url = []
+
+    if request.user.is_authenticated:
+        customer = request.user
+        # Lấy tất cả các sản phẩm trong giỏ hàng có tên của khách hàng hiện tại
+        cart_items = Cart.objects.filter(cart_customer=customer)
+
+        # Duyệt qua từng sản phẩm để lấy ảnh đại diện và định dạng giá
+        for cart_item in cart_items:
+            product = cart_item.cart_product
+
+            # Định dạng giá
+            product.prod_price_formatted = "{:,.0f}".format(product.prod_price)
+
+            # Lấy ảnh đại diện
+            avatar_image = Product_Image.objects.filter(
+                prod_name=product, is_avatar=True
+            ).first()  # Lấy ảnh avatar đầu tiên nếu có
+
+            if avatar_image:
+                images_with_url.append({
+                    'product_id': product.id,
+                    'url': avatar_image.ImageURL,
+                    'is_avatar': avatar_image.is_avatar,
+                })
+
+    # Kiểm tra giỏ hàng có rỗng hay không
+    if not cart_items:
+        empty_cart_message = "Bạn chưa bỏ gì vào giỏ hàng"
+    else:
+        empty_cart_message = ""
+
+    context = {
+        'cart_items': cart_items,
+        'images': images_with_url,
+        'empty_cart_message': empty_cart_message,  # Thêm thông báo nếu giỏ hàng trống
+    }
+    return render(request, 'GioHang.html', context)
