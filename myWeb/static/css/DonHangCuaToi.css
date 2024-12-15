@@ -1,0 +1,131 @@
+
+
+/* Order Container*/
+
+.order-cont {
+    display: grid;
+    gap: 10px;
+    padding-bottom: 15px;
+}
+
+.order-cont .box {
+    display: flex;
+    justify-content: space-between;
+}
+
+.order-cont .box p {
+    padding-top: 20px;
+}
+
+.order-cont .box .search-bar {
+    width: 50%;
+    padding: 15px 15px;
+    border: 1px solid #ccc;
+    border-radius: 50px;
+}
+
+.order-cont ul {
+    display: flex;
+    justify-content: space-around;
+    background-color: white;
+    border-radius: 15px;
+    border: 1px solid #ccc;
+    padding: 10px 0 10px 0;
+    width: 1300px;
+}
+
+/* .order-cont li:nth-child(1) a {
+    border-bottom: 1px solid #008DDC;
+    border-width: thick;
+    padding-bottom: 5px;
+  } */
+
+.order-cont ul li a{
+    font-size: large;
+    font-weight: bold;
+    color:black;    
+}
+
+.item-card, .item-card2 {
+    border: 1px solid #ccc;
+    border-radius: 15px;
+    text-align: right;
+    background-color: white;
+}
+
+.item-card2 {
+    display: none;
+}
+
+.box p:first-child {
+    font-weight: bold;
+}
+
+.item-card .box, .item-card2 .box {
+    padding: 0 70px 0 70px;
+}
+
+.inner-name {
+    color: #5eaa55
+}
+
+.item-card2 .inner-name {
+    color: crimson;
+}
+
+.item-info {
+    border-bottom: 1px solid gainsboro;
+    border-top: 1px solid gainsboro;
+}
+
+.item-info .inner-name {
+    width: 300px;
+    margin-left: -250px;
+    color: black;
+    text-align: left;
+}
+
+.item-info .inner-price {
+    color: black;
+}
+
+.item-info div {
+    display: flex; 
+    justify-content: space-between;    
+}
+
+.item-info div{
+
+    align-items: center;
+    padding: 10px 80px 0px 80px;
+}
+
+.inner-price {
+    color: #008DDC;
+    padding-left: 10px;
+}
+
+.order-btn {
+    width: 200px;
+    margin: 0px 0px 10px 0;
+}
+
+.avatar-image {
+    width: 50px;
+    height: 50px;
+    object-fit: cover; /* Đảm bảo ảnh được cắt để vừa khung */
+    border-radius: 5px; /* (Tùy chọn) Bo góc nhẹ cho ảnh */
+}
+
+.order-info {
+    padding-left: 70px;
+    border-top: 1px solid gainsboro;
+    padding-top: 10px;
+}
+
+.item-card .order-info p {
+    text-align: left;
+}
+.total-method {
+    border-top: 1px solid gainsboro;
+}

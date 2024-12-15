@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% block content %}
+    <link rel="stylesheet" href="{% static 'css/DonHangCuaToi.css'%}">
+
+    <section class="bread-crumb">
+        <div class="container">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'TrangChu' %}">Trang chủ</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Đơn hàng của tôi</li>
+                </ol>
+            </nav>
+        </div>
+    </section>
+    
+    <section class="container">
+        <div class="order-cont">
+            <div class="box">
+                <p>Đơn hàng của tôi</p>
+            </div>
+            <ul>
+                <li><a href="#" class="filter-order active" onClick="tatca(this)">Tất cả</a></li>
+                <li><a href="#" class="filter-order" onClick="other(this)">Đang xử lý</a></li>
+                <li><a href="#" class="filter-order" onClick="other(this)">Đang giao</a></li>
+                <li><a href="#" class="filter-order" onClick="other(this)">Đã giao</a></li>
+                <li><a href="#" class="filter-order" onClick="dahuy(this)">Đã hủy</a></li>                               
+            </ul>
+            
+            {% for order in order_details %}
+                <div class="item-card" data-status="{{ order.order_status }}">
+                    <div class="box">
+                        <p>Đơn hàng ngày {{ order.order_date|date:"d/m/Y" }}</p>
+                        <p class="inner-name">{{ order.order_status }}</p>
+                    </div>
+                    <div class="order-info">
+                        <p>Người nhận: {{ order.receiver_name }}</p>
+                        <p>Số điện thoại nhận hàng: {{ order.receiver_phone }}</p>
+                        <p>Địa chỉ nhận hàng: {{ order.receiver_address }}</p>
+                    </div>
+                    <div class="item-info">
+                        {% for item in order.items %}
+                        <div>
+                            <img src="{{ item.image_url }}" alt="" class="avatar-image">
+                            <p class="inner-name">{{ item.product_name }}</p>
+                            <p class="inner-price">{{ item.total_price }}đ</p>
+                            <p>x{{ item.quantity }} {{ item.product_unit_type }}</p>                        
+                        </div>
+                        {% endfor %}
+                        <div class="total-method">
+                            <p>{{order.order_method}}</p>
+                            <div>
+                                <p>Thành tiền:</p>
+                                <p class="inner-price">{{ order.order_total }}đ</p>
+                            </div> 
+                            {% if order.order_status == "Đang xử lý" %}
+                            <button class="order-btn">Yêu cầu hủy</button>
+                            {% endif %}
+                        </div>
+                        
+                    </div>
+                    
+                    
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+    
+    <script>
+        function tatca(link) {
+            const itemCards = document.querySelectorAll(".item-card");
+            itemCards.forEach(card => {
+                card.style.display = "block";
+            });
+            activeLink(link);
+        }
+        
+        function dahuy(link) {
+            const itemCards = document.querySelectorAll(".item-card");
+            itemCards.forEach(card => {
+                card.style.display = card.getAttribute("data-status") === "Đã hủy" ? "block" : "none";
+            });
+            activeLink(link);
+        }
+        
+        function other(link) {
+            const itemCards = document.querySelectorAll(".item-card");
+            itemCards.forEach(card => {
+                card.style.display = card.getAttribute("data-status") === link.innerText.trim() ? "block" : "none";
+            });
+            activeLink(link);
+        }
+        
+        function activeLink(link) {
+            // Lấy tất cả các liên kết
+            const links = document.querySelectorAll('.filter-order');
+        
+            // Xóa kiểu dáng của tất cả các liên kết
+            links.forEach(link => {
+                link.style.borderBottom = '';
+                link.style.borderWidth = '';
+                link.style.paddingBottom = '';
+            });
+        
+            // Thêm kiểu dáng cho liên kết vừa được click
+            link.style.borderBottom = '1px solid #008DDC';
+            link.style.borderWidth = 'thick';
+            link.style.paddingBottom = '5px';
+        }
+        
+        // Đặt liên kết "Tất cả" làm mặc định khi tải trang
+        document.addEventListener("DOMContentLoaded", function() {
+            const allLink = document.querySelector('.filter-order.active');
+            if (allLink) {
+                activeLink(allLink);
+            }
+        });
+        
+    </script>
+    
+    {% endblock %}

@@ -13,6 +13,7 @@ urlpatterns = [
     path('logout/', views.DangXuat, name='DangXuat'),
     path('cart/', views.GioHang, name='GioHang'),
     path('order/', views.DatHang, name='DatHang'),
+    path('myorder/', views.DonHangCuaToi, name='DonHangCuaToi'),
     
     path('<str:cate_lv1_name>/', views.PList_Lv1, name='categories_products'),
     path('<str:cate_lv1_name>/<str:cate_lv2_name>/', views.PList_Lv2, name='categories_lv2'),

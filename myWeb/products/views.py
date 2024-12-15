@@ -441,3 +441,40 @@ def DatHang(request):
             messages.error(request, "Vui lòng điền đầy đủ thông tin nhận hàng và chọn phương thức thanh toán.")
 
     return render(request, 'DatHang.html', context)
+
+def DonHangCuaToi(request):
+    customer = request.user
+    order_list = Order.objects.filter(order_customer=customer)
+    order_details = []
+
+    # Lấy chi tiết từng đơn hàng
+    for order in order_list:
+        order_items = OrderItem.objects.filter(order=order)
+        items_info = []
+        for item in order_items:
+            avatar_image = Product_Image.objects.filter(prod_name=item.product, is_avatar=True).first()
+            image_url = avatar_image.ImageURL if avatar_image else ''  # URL của ảnh đại diện
+            items_info.append({
+                'product_name': item.product.prod_name,
+                'quantity': item.quantity,
+                'price': item.product.prod_price,
+                'total_price': "{:,.0f}".format(item.quantity * item.product.prod_price),  # Tính tổng tiền
+                'image_url': image_url,  # URL hình ảnh sản phẩm
+            })
+        order_details.append({
+            'order_id': order.id,
+            'order_date': order.order_date,
+            'order_status': order.order_status,
+            'order_total': "{:,.0f}".format(order.order_total),
+            'order_method': order.order_method,
+            'receiver_name': order.order_receiver_name,
+            'receiver_phone': order.order_receiver_phone,
+            'receiver_address': order.order_adress,
+            'items': items_info,
+        })
+
+    context = {
+        'order_details': order_details,
+    }
+
+    return render(request, 'DonHangCuaToi.html', context)

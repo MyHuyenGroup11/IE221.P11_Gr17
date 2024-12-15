@@ -67,19 +67,16 @@
                                         <ul>
                                             <li>
                                                 <a href="#">
-                                                    
                                                     Thông tin cá nhân
                                                 </a>
                                             </li>
                                             <li>
-                                                <a href="#">
-                                                    
+                                                <a href="{% url 'DonHangCuaToi'%}">
                                                     Đơn hàng của tôi
                                                 </a>
                                             </li>
                                             <li>
                                                 <a href="{% url 'DangXuat' %}" id="logout-link">
-                                                    
                                                     Đăng xuất
                                                 </a>
                                             </li>
@@ -91,7 +88,6 @@
                                 <p class="qnt_item">{{ cart_item_count }}</p>
                                 {% endif %}
                             
-
                                 <button class="cart" onclick="window.location.href = '{% url 'GioHang' %}'">
                                     <i class="fa-solid fa-cart-shopping"></i> Giỏ hàng
                                 </button>                                
