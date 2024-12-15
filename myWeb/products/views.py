@@ -1,11 +1,11 @@
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.http import HttpResponse
 from .models import *
 from django.core.paginator import Paginator
 # Create your views here.
 def TrangChu(request):
     # Lấy 6 món ăn
-    products = Product.objects.all()
+    products = Product.objects.all()[:6]
     
     # Lấy món ăn và gắn URL của ảnh avatar vào từng món ăn
     for product in products:
@@ -183,16 +183,58 @@ def ChiTietSanPham(request, cate_lv1_name, cate_lv2_name, product_name):
 
 def TimKiem(request):
     if request.method == "POST":
-        searched = request.POST["searched"]
-        result = Product.objects.filter(prod_name__contains = searched)
-        for product in result:
-            avatar = Product_Image.objects.filter(prod_name=product, is_avatar=True).first()
-            product.avatar_url = avatar.ImageURL if avatar else None
+        searched = request.POST.get("searched", "").strip()
+        if not searched:
+            return redirect('TrangChu')  # Redirect về trang chủ nếu không có gì được tìm kiếm
 
-            # Định dạng giá
-            product.prod_price_formatted = "{:,.0f}".format(product.prod_price)
-    context = {"searched":searched, "result": result}
-    return render(request, 'TimKiem.html', context)
+        keys = Product.objects.filter(prod_name__icontains=searched)
+
+        if not keys.exists():
+            no_results_message = "Không có kết quả trùng khớp cho tìm kiếm của bạn."
+            context = {
+                'no_results_message': no_results_message if not keys.exists() else None,
+                'searched': searched,
+            }
+            return render(request, 'TimKiem.html', context)
+        else:
+            # Lấy sản phẩm và gắn URL của ảnh avatar vào từng sản phẩm
+            for product in keys:
+                avatar = Product_Image.objects.filter(prod_name=product, is_avatar=True).first()
+                product.avatar_url = avatar.ImageURL if avatar else None
+
+                # Định dạng giá
+                product.prod_price_formatted = "{:,.0f}".format(product.prod_price)
+
+            # Phân trang với 12 sản phẩm mỗi trang
+            paginator = Paginator(keys, 12)
+            page_number = request.GET.get('page')
+            page_obj = paginator.get_page(page_number)
+
+            # Xử lý hiển thị phân trang rút gọn
+            total_pages = paginator.num_pages
+            current_page = page_obj.number
+            if total_pages <= 7:
+                page_range = paginator.page_range
+            else:
+                if current_page <= 4:
+                    page_range = list(range(1, 6)) + ['...'] + [total_pages]
+                elif current_page > total_pages - 4:
+                    page_range = [1] + ['...'] + list(range(total_pages - 4, total_pages + 1))
+                else:
+                    page_range = (
+                        [1] + ['...']
+                        + list(range(current_page - 1, current_page + 2))
+                        + ['...']
+                        + [total_pages]
+                    )
+
+        context = {
+            'page_obj': page_obj,
+            'page_range': page_range,
+            'searched': searched,
+            'no_results_message': no_results_message if not keys.exists() else None,
+        }
+        return render(request, 'TimKiem.html', context)
 
 def product_detail(request, prod_cate_lv1, prod_cate_lv2, prod_name):
     product = Product.objects.get(

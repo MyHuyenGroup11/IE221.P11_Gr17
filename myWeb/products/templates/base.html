@@ -88,6 +88,16 @@
 </body>
 
 <script>
+
+    function validateSearch() {
+        var searched = document.querySelector('[name="searched"]').value.trim();
+        if (searched === "") {
+            alert("Vui lòng nhập thông tin tìm kiếm.");
+            return false;
+        }
+        return true;
+    }
+
     // 1. Hiển thị pop up thông báo khi ấn nút Chọn mua
     document.addEventListener('DOMContentLoaded', () => {
         const popup = document.getElementById('popup');
