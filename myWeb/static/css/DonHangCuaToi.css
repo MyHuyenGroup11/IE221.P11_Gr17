@@ -10,6 +10,10 @@
     justify-content: space-between;
 }
 
+.order-cont .box h1 {
+    font-size: 18px;
+}
+
 .order-cont .box p {
     padding-top: 20px;
 }
@@ -43,6 +47,10 @@
     border-radius: 15px;
     text-align: right;
     background-color: white;
+}
+
+.item-card .box {
+    padding: 0px 30px;
 }
 
 .box p:first-child {
