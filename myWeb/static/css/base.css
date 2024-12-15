@@ -254,11 +254,6 @@ nav .dropdown:hover .dropdown-content {
 /* End dropdown cá nhân */
 
 /* Carousel */
-/* #carouselExampleCaptions {
-    /* Đặt chiều cao tối đa */
-     /* Ẩn phần hình ảnh bị tràn */
-/*}*/
-  
   #carouselExampleCaptions img {
     height: 400px; /* Đảm bảo hình ảnh chiếm đủ chiều cao */
     object-fit: cover; /* Cắt hình ảnh để vừa với carousel */
