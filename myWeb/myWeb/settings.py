@@ -65,6 +65,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'products.context_processors.nav_categories',  # Thêm dòng này để context processors nav được nhận diện
+                'products.context_processors.cart_item_count',  # Thêm dòng để tính số loại món ăn được nhận diện
             ],
         },
     },

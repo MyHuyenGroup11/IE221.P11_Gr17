@@ -55,7 +55,10 @@
                                 <p class="inner-price">{{ order.order_total }}đ</p>
                             </div> 
                             {% if order.order_status == "Đang xử lý" %}
-                            <button class="order-btn">Yêu cầu hủy</button>
+                            <form method="post" action="{% url 'cancel_order' order.order_id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger">Hủy đơn</button>
+                            </form>
                             {% endif %}
                         </div>
                         
@@ -104,7 +107,7 @@
             });
         
             // Thêm kiểu dáng cho liên kết vừa được click
-            link.style.borderBottom = '1px solid #008DDC';
+            link.style.borderBottom = '1px solid brown';
             link.style.borderWidth = 'thick';
             link.style.paddingBottom = '5px';
         }

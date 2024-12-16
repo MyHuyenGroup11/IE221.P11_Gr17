@@ -258,3 +258,29 @@ nav .dropdown:hover .dropdown-content {
     height: 400px; /* Đảm bảo hình ảnh chiếm đủ chiều cao */
     object-fit: cover; /* Cắt hình ảnh để vừa với carousel */
   }
+
+
+  .qnt_item {
+    float: right;
+    position: relative;
+    left: 30px;
+    width: 20px; /* Kích thước hình tròn */
+    height: 20px; /* Kích thước hình tròn */
+    line-height: 20px; /* Căn chỉnh số theo chiều dọc */
+    border-radius: 50%; /* Tạo hình tròn */
+    background-color: rgb(255, 0, 0); /* Màu nền cam */
+    color: white; /* Màu chữ trắng */
+    font-weight: bold; /* In đậm số */
+    text-align: center; /* Căn chỉnh số theo chiều ngang */
+    font-size: 16px; /* Kích thước chữ */
+    margin-left: 0px ; /* Canh lề (tuỳ ý nếu cần chỉnh thêm) */
+    z-index: 100;
+}
+header .main-header .logo {
+    display: flex;
+    justify-content: center;
+}
+
+header .main-header .logo img {
+    width: 50%;
+}

@@ -12,24 +12,26 @@ from django.core.validators import validate_email
 from django.contrib.auth.decorators import login_required
 
 # Create your views here.
+from random import sample
+
 def TrangChu(request):
-    # Lấy 6 món ăn
-    products = Product.objects.all()[:6]
+    # Lấy 12 món ăn ngẫu nhiên
+    products = Product.objects.order_by('?')[:12]
     
     # Lấy món ăn và gắn URL của ảnh avatar vào từng món ăn
     for product in products:
         avatar = Product_Image.objects.filter(prod_name=product, is_avatar=True).first()
         product.avatar_url = avatar.ImageURL if avatar else None
     
-    # Định dạng giá
+        # Định dạng giá
         product.prod_price_formatted = "{:,.0f}".format(product.prod_price)
 
-    # Cập nhật số lượng món ăn cho tất phân loại 2
+    # Cập nhật số lượng món ăn cho tất cả phân loại 2
     categories_lv2 = Category_lv2.objects.all()
     for category in categories_lv2:
         category.update_num_products()
 
-    # Lấp top 14 phân loại 2 có nhiều món ăn nhất
+    # Lấy top 14 phân loại cấp 2 có nhiều món ăn nhất
     top_categories = Category_lv2.objects.all().order_by('-num_products')[:14]
         
     context = {
@@ -47,6 +49,15 @@ def PList_Lv1(request, cate_lv1_name):
 
     # Lấy món ăn thuộc danh mục cấp 2
     products = Product.objects.filter(prod_cate_lv2__in=categories_lv2)
+
+    # Lấy tham số sắp xếp từ request GET
+    sort_order = request.GET.get('sort', 'default')  # Mặc định là 'default'
+
+    # Sắp xếp sản phẩm dựa trên tham số
+    if sort_order == 'asc':
+        products = products.order_by('prod_price')  # Sắp xếp tăng dần
+    elif sort_order == 'desc':
+        products = products.order_by('-prod_price')  # Sắp xếp giảm dần
 
     # Cập nhật số lượng món ăn của từng category_lv2
     for cate_lv2 in categories_lv2:
@@ -95,18 +106,28 @@ def PList_Lv1(request, cate_lv1_name):
         'categories_lv2': categories_lv2,
         'page_obj': page_obj,
         'page_range': page_range,
-        'breadcrumb': breadcrumb
+        'breadcrumb': breadcrumb,
+        'sort_order': sort_order  # Để nhận biết trạng thái sắp xếp
     }
 
     return render(request, 'PList_Lv1.html', context)
+
 
 def PList_Lv2(request, cate_lv1_name, cate_lv2_name):
     # Lấy danh mục cấp 1 và cấp 2 dựa trên tên
     cate_lv1 = get_object_or_404(Category_lv1, cate_1=cate_lv1_name)
     cate_lv2 = get_object_or_404(Category_lv2, cate_2=cate_lv2_name, cate_1=cate_lv1)
 
+    # Lấy tham số sắp xếp từ URL
+    sort_order = request.GET.get('sort', 'default')
+
     # Lấy món ăn thuộc danh mục cấp 2
-    products = Product.objects.filter(prod_cate_lv2=cate_lv2)
+    if sort_order == 'asc':
+        products = Product.objects.filter(prod_cate_lv2=cate_lv2).order_by('prod_price')
+    elif sort_order == 'desc':
+        products = Product.objects.filter(prod_cate_lv2=cate_lv2).order_by('-prod_price')
+    else:
+        products = Product.objects.filter(prod_cate_lv2=cate_lv2)  # Mặc định không sắp xếp
 
     # Lấy món ăn và gắn URL của ảnh avatar vào từng món ăn
     for product in products:
@@ -122,7 +143,6 @@ def PList_Lv2(request, cate_lv1_name, cate_lv2_name):
         {"name": cate_lv1.cate_1, "url": f"/{cate_lv1.cate_1}/"},
         {"name": cate_lv2.cate_2, "url": f"/{cate_lv1.cate_1}/{cate_lv2.cate_2}/"}
     ]
-
 
     # Phân trang với 12 món ăn mỗi trang
     paginator = Paginator(products, 12)
@@ -153,10 +173,12 @@ def PList_Lv2(request, cate_lv1_name, cate_lv2_name):
         'cate_lv2': cate_lv2,
         'page_obj': page_obj,
         'page_range': page_range,
-        'breadcrumb': breadcrumb
+        'breadcrumb': breadcrumb,
+        'sort_order': sort_order
     }
 
     return render(request, 'PList_Lv2.html', context)
+
 
 def ChiTietSanPham(request, cate_lv1_name, cate_lv2_name, product_name):
     # Lấy danh mục cấp 1 và cấp 2 dựa trên tên
@@ -483,6 +505,22 @@ def DonHangCuaToi(request):
     }
 
     return render(request, 'DonHangCuaToi.html', context)
+
+def HuyDonHang(request, order_id):
+    if request.method == "POST":
+        # Lấy đơn hàng cần hủy
+        order = get_object_or_404(Order, id=order_id, order_customer=request.user)
+        
+        # Kiểm tra trạng thái đơn hàng trước khi hủy
+        if order.order_status in ["Đã giao", "Đã hủy"]:
+            messages.error(request, "Không thể hủy đơn hàng đã giao hoặc đã hủy.")
+        else:
+            # Cập nhật trạng thái đơn hàng
+            order.order_status = "Đã hủy"
+            order.save()
+            messages.success(request, "Đơn hàng đã được hủy thành công.")
+
+    return redirect('DonHangCuaToi')
 
 def TrangCaNhan(request):
     customer = request.user

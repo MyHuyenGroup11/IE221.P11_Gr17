@@ -26,10 +26,11 @@
                 <h1>Danh sách món {{ cate_lv2.cate_2}}</h1>
                 <div class="sort">
                     <h2>Sắp xếp theo Giá</h2>
-                    <button id="sort-default">Mặc định</button>
-                    <button id="sort-asc">Tăng dần</button>
-                    <button id="sort-desc">Giảm dần</button>
+                    <button id="sort-default" data-sort="default" class="{% if sort_order == 'default' %}active{% endif %}">Mặc định</button>
+                    <button id="sort-asc" data-sort="asc" class="{% if sort_order == 'asc' %}active{% endif %}">Tăng dần</button>
+                    <button id="sort-desc" data-sort="desc" class="{% if sort_order == 'desc' %}active{% endif %}">Giảm dần</button>
                 </div>
+                
             </div>
         </div>
         <div class="product-cards">
@@ -103,63 +104,30 @@
 </section>
 
 <script>
-    // Bộ lọc và sắp xếp cho trang danh sách sản phẩm lv1 (Chỉ có bộ lọc theo giá)
-    document.addEventListener('DOMContentLoaded', () => {
-        const sortAscBtn = document.getElementById('sort-asc');
-        const sortDescBtn = document.getElementById('sort-desc');
-        const sortDefaultBtn = document.getElementById('sort-default'); // Nút mặc định
-        const productList = document.getElementById('product-list');
-        const old_list = Array.from(productList.children);
+    document.addEventListener('DOMContentLoaded', function () {
+        // Lấy tất cả các nút sắp xếp
+        const sortButtons = document.querySelectorAll('.sort button');
 
-        // Hàm sắp xếp sản phẩm
-        function sortProducts(order) {
-            const products = Array.from(productList.children);
+        sortButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                // Xóa lớp 'active' khỏi tất cả các nút
+                sortButtons.forEach(btn => btn.classList.remove('active'));
 
-            products.sort((a, b) => {
-                const priceA = parseFloat(a.dataset.price);
-                const priceB = parseFloat(b.dataset.price);
+                // Thêm lớp 'active' vào nút được nhấn
+                this.classList.add('active');
 
-                if (order === 'asc') {
-                    return priceA - priceB;
-                } else {
-                    return priceB - priceA;
-                }
+                // Lấy giá trị sắp xếp từ data-sort
+                const sortValue = this.getAttribute('data-sort');
+
+                // Lấy URL hiện tại
+                const currentUrl = new URL(window.location.href);
+
+                // Cập nhật tham số 'sort' trong URL
+                currentUrl.searchParams.set('sort', sortValue);
+
+                // Chuyển hướng đến URL mới
+                window.location.href = currentUrl.toString();
             });
-
-            productList.innerHTML = '';
-            products.forEach(product => productList.appendChild(product));
-        }
-
-        // Khi trang được tải lần đầu, nút "Mặc định" sẽ được active
-        sortDefaultBtn.classList.add('active');
-
-        // Lắng nghe sự kiện cho bộ lọc
-        priceFilter.addEventListener('change', (event) => {
-            filterProductsByPrice(event.target.value);
-        });
-
-        // Lắng nghe sự kiện cho nút sắp xếp
-        sortAscBtn.addEventListener('click', () => {
-            sortAscBtn.classList.add('active');
-            sortDescBtn.classList.remove('active');
-            sortDefaultBtn.classList.remove('active');
-            sortProducts('asc');
-        });
-
-        sortDescBtn.addEventListener('click', () => {
-            sortDescBtn.classList.add('active');
-            sortAscBtn.classList.remove('active');
-            sortDefaultBtn.classList.remove('active');
-
-            sortProducts('desc');
-        });
-
-        sortDefaultBtn.addEventListener('click', () => {
-            sortAscBtn.classList.remove('active');
-            sortDescBtn.classList.remove('active');
-            sortDefaultBtn.classList.add('active');
-            productList.innerHTML = '';
-            old_list.forEach(product => productList.appendChild(product));
         });
     });
 </script>

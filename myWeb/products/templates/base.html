@@ -49,6 +49,11 @@
             <div class="main-header">
                 <div class="row">
                     <div class="col-xl-2">
+                        <a href="{% url 'TrangChu' %}">
+                            <div class="logo">
+                                <img src="{% static 'image\logo.png' %}" alt="Logo">
+                            </div>
+                        </a>   
                     </div>
                     <div class="col-xl-7">
                         <form class="search" method = POST action = "{% url "TimKiem" %}">
