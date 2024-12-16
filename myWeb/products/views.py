@@ -10,21 +10,19 @@ from django.http import JsonResponse
 from django.contrib.auth.models import User
 from django.core.validators import validate_email
 from django.contrib.auth.decorators import login_required
-
-# Create your views here.
 from random import sample
+# Create your views here.
+
 
 def TrangChu(request):
     # Lấy 12 món ăn ngẫu nhiên
     products = Product.objects.order_by('?')[:12]
     
-    # Lấy món ăn và gắn URL của ảnh avatar vào từng món ăn
     for product in products:
-        avatar = Product_Image.objects.filter(prod_name=product, is_avatar=True).first()
-        product.avatar_url = avatar.ImageURL if avatar else None
-    
+        # Lấy món ăn và gắn URL của ảnh avatar vào từng món ăn
+        product.avatar_url = product.get_avatar_url()
         # Định dạng giá
-        product.prod_price_formatted = "{:,.0f}".format(product.prod_price)
+        product.prod_price_formatted = product.formatted_price()
 
     # Cập nhật số lượng món ăn cho tất cả phân loại 2
     categories_lv2 = Category_lv2.objects.all()
@@ -50,26 +48,19 @@ def PList_Lv1(request, cate_lv1_name):
     # Lấy món ăn thuộc danh mục cấp 2
     products = Product.objects.filter(prod_cate_lv2__in=categories_lv2)
 
-    # Lấy tham số sắp xếp từ request GET
-    sort_order = request.GET.get('sort', 'default')  # Mặc định là 'default'
-
-    # Sắp xếp sản phẩm dựa trên tham số
-    if sort_order == 'asc':
-        products = products.order_by('prod_price')  # Sắp xếp tăng dần
-    elif sort_order == 'desc':
-        products = products.order_by('-prod_price')  # Sắp xếp giảm dần
+    # Sắp xếp các món ăn
+    sort_order = request.GET.get('sort', 'default')  
+    products = Product.sort_products(products, sort_order)
 
     # Cập nhật số lượng món ăn của từng category_lv2
     for cate_lv2 in categories_lv2:
         cate_lv2.update_num_products()
 
-    # Lấy món ăn và gắn URL của ảnh avatar vào từng món ăn
     for product in products:
-        avatar = Product_Image.objects.filter(prod_name=product, is_avatar=True).first()
-        product.avatar_url = avatar.ImageURL if avatar else None
-
+        # Lấy món ăn và gắn URL của ảnh avatar vào từng món ăn
+        product.avatar_url = product.get_avatar_url()
         # Định dạng giá
-        product.prod_price_formatted = "{:,.0f}".format(product.prod_price)  # xxx.xxx
+        product.prod_price_formatted = product.formatted_price()
 
     # Cập nhật breadcrumb
     breadcrumb = [
@@ -117,25 +108,17 @@ def PList_Lv2(request, cate_lv1_name, cate_lv2_name):
     # Lấy danh mục cấp 1 và cấp 2 dựa trên tên
     cate_lv1 = get_object_or_404(Category_lv1, cate_1=cate_lv1_name)
     cate_lv2 = get_object_or_404(Category_lv2, cate_2=cate_lv2_name, cate_1=cate_lv1)
+    pre = Product.objects.filter(prod_cate_lv2=cate_lv2)
+    
+    # Sắp xếp các món ăn
+    sort_order = request.GET.get('sort', 'default')  
+    products = Product.sort_products(pre, sort_order)
 
-    # Lấy tham số sắp xếp từ URL
-    sort_order = request.GET.get('sort', 'default')
-
-    # Lấy món ăn thuộc danh mục cấp 2
-    if sort_order == 'asc':
-        products = Product.objects.filter(prod_cate_lv2=cate_lv2).order_by('prod_price')
-    elif sort_order == 'desc':
-        products = Product.objects.filter(prod_cate_lv2=cate_lv2).order_by('-prod_price')
-    else:
-        products = Product.objects.filter(prod_cate_lv2=cate_lv2)  # Mặc định không sắp xếp
-
-    # Lấy món ăn và gắn URL của ảnh avatar vào từng món ăn
     for product in products:
-        avatar = Product_Image.objects.filter(prod_name=product, is_avatar=True).first()
-        product.avatar_url = avatar.ImageURL if avatar else None
-
+        # Lấy món ăn và gắn URL của ảnh avatar vào từng món ăn
+        product.avatar_url = product.get_avatar_url()
         # Định dạng giá
-        product.prod_price_formatted = "{:,.0f}".format(product.prod_price)
+        product.prod_price_formatted = product.formatted_price()
 
     # Cập nhật breadcrumb
     breadcrumb = [
@@ -193,8 +176,7 @@ def ChiTietSanPham(request, cate_lv1_name, cate_lv2_name, product_name):
     images_with_url = [{'url': img.ImageURL, 'is_avatar': img.is_avatar} for img in images]
     
     # Định dạng giá
-    product.prod_price_formatted = "{:,.0f}".format(product.prod_price)
-    
+    product.prod_price_formatted = product.formatted_price()
     # Cập nhật breadcrumb
     breadcrumb = [
         {"name": "Trang chủ", "url": "/"},
@@ -230,12 +212,10 @@ def TimKiem(request):
         else:
             # Lấy món ăn và gắn URL của ảnh avatar vào từng món ăn
             for product in keys:
-                avatar = Product_Image.objects.filter(prod_name=product, is_avatar=True).first()
-                product.avatar_url = avatar.ImageURL if avatar else None
-
+                # Lấy món ăn và gắn URL của ảnh avatar vào từng món ăn
+                product.avatar_url = product.get_avatar_url()
                 # Định dạng giá
-                product.prod_price_formatted = "{:,.0f}".format(product.prod_price)
-
+                product.prod_price_formatted = product.formatted_price()
             # Phân trang với 12 món ăn mỗi trang
             paginator = Paginator(keys, 12)
             page_number = request.GET.get('page')
@@ -281,7 +261,7 @@ def GioHang(request):
             product = cart_item.cart_product
 
             # Định dạng giá
-            product.prod_price_formatted = "{:,.0f}".format(product.prod_price)
+            product.prod_price_formatted = product.formatted_price()
 
             # Lấy ảnh đại diện
             avatar_image = Product_Image.objects.filter(
@@ -295,7 +275,7 @@ def GioHang(request):
                     'is_avatar': avatar_image.is_avatar,
                 })
 
-    total_selected_price = "{:,.0f}".format(Cart.calculate_selected_total(customer))   # Tính tổng tiền các sản phẩm được chọn
+    total_selected_price = "{:,.0f}".format(Cart.calculate_selected_total(customer))   # Tính tổng tiền các món ăn được chọn
 
     
     # Kiểm tra giỏ hàng có rỗng hay không
@@ -396,7 +376,7 @@ def DatHang(request):
 
     selected_cart_items = Cart.objects.filter(cart_customer=customer, is_selected=True)
 
-    # Tạo context cho các sản phẩm được chọn và hình ảnh đại diện của sản phẩm
+    # Tạo context cho các món ăn được chọn và hình ảnh đại diện của món ăn
     images_with_url = []
     total_price = 0  # Tổng tiền phải trả
 
@@ -409,9 +389,9 @@ def DatHang(request):
         cart_item.item_total_price = "{:,.0f}".format(item_total_price)
         total_price += item_total_price
 
-        # Định dạng giá sản phẩm
-        product.prod_price_formatted = "{:,.0f}".format(price)
-
+        # Định dạng giá món ăn
+        product.prod_price_formatted = product.formatted_price()
+        
         avatar_image = Product_Image.objects.filter(prod_name=product, is_avatar=True).first()
         if avatar_image:
             images_with_url.append({
@@ -449,7 +429,7 @@ def DatHang(request):
             )
             order.save()
 
-            # Thêm các sản phẩm vào đơn hàng
+            # Thêm các món ăn vào đơn hàng
             for cart_item in selected_cart_items:
                 OrderItem.objects.create(
                     order=order,
@@ -457,7 +437,7 @@ def DatHang(request):
                     quantity=cart_item.cart_product_quantity
                 )
 
-            # Xóa các sản phẩm đã được thêm vào đơn hàng khỏi giỏ hàng
+            # Xóa các món ăn đã được thêm vào đơn hàng khỏi giỏ hàng
             selected_cart_items.delete()
 
             # Hiển thị thông báo thành công
@@ -486,7 +466,7 @@ def DonHangCuaToi(request):
                 'quantity': item.quantity,
                 'price': item.product.prod_price,
                 'total_price': "{:,.0f}".format(item.quantity * item.product.prod_price),  # Tính tổng tiền
-                'image_url': image_url,  # URL hình ảnh sản phẩm
+                'image_url': image_url,  # URL hình ảnh món ăn
             })
         order_details.append({
             'order_id': order.id,
