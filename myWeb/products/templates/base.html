@@ -59,7 +59,7 @@
                         <form class="search" method = POST action = "{% url "TimKiem" %}">
                             {% csrf_token %}
                             <input class="search-bar" type="search"
-                                placeholder="Bạn muốn ăn gì?" name="searched">
+                                placeholder="Bạn muốn ăn gì?" name="searched" required>
                             <button class="search-btn" type="submit">Tìm kiếm</button>
                         </form>
                     </div>
