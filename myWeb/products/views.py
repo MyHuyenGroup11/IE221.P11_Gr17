@@ -172,7 +172,7 @@ def ChiTietSanPham(request, cate_lv1_name, cate_lv2_name, product_name):
     product = get_object_or_404(Product, prod_name=product_name, prod_cate_lv1=cate_lv1, prod_cate_lv2=cate_lv2)
 
     # Lấy danh sách ảnh của món ăn
-    images = Product_Image.objects.filter(prod_name=product)
+    images = Product_Image.objects.filter(product=product)
     images_with_url = [{'url': img.ImageURL, 'is_avatar': img.is_avatar} for img in images]
     
     # Định dạng giá
@@ -265,7 +265,7 @@ def GioHang(request):
 
             # Lấy ảnh đại diện
             avatar_image = Product_Image.objects.filter(
-                prod_name=product, is_avatar=True
+                product=product, is_avatar=True
             ).first()  # Lấy ảnh avatar đầu tiên nếu có
 
             if avatar_image:
@@ -392,7 +392,7 @@ def DatHang(request):
         # Định dạng giá món ăn
         product.prod_price_formatted = product.formatted_price()
         
-        avatar_image = Product_Image.objects.filter(prod_name=product, is_avatar=True).first()
+        avatar_image = Product_Image.objects.filter(product=product, is_avatar=True).first()
         if avatar_image:
             images_with_url.append({
                 'product_id': product.id,
@@ -459,7 +459,7 @@ def DonHangCuaToi(request):
         order_items = OrderItem.objects.filter(order=order)
         items_info = []
         for item in order_items:
-            avatar_image = Product_Image.objects.filter(prod_name=item.product, is_avatar=True).first()
+            avatar_image = Product_Image.objects.filter(product=item.product, is_avatar=True).first()
             image_url = avatar_image.ImageURL if avatar_image else ''  # URL của ảnh đại diện
             items_info.append({
                 'product_name': item.product.prod_name,

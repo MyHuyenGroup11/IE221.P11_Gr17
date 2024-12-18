@@ -20,15 +20,18 @@ class CreateUserForm(UserCreationForm):
             }),
             'email': forms.EmailInput(attrs={
                 'class': 'form-input',
-                'placeholder': 'Nhập email'
+                'placeholder': 'Nhập email',
+                'required': 'required'
             }),
             'first_name': forms.TextInput(attrs={
                 'class': 'form-input',
-                'placeholder': 'Nhập tên'
+                'placeholder': 'Nhập tên',
+                'required': 'required'
             }),
             'last_name': forms.TextInput(attrs={
                 'class': 'form-input',
-                'placeholder': 'Nhập họ'
+                'placeholder': 'Nhập họ',
+                'required': 'required'
             }),
             
             #Không truyền thuộc tính này vào các 2 form nhập lại mật khẩu được nên dùng JS thay thế
@@ -91,7 +94,7 @@ class Product(models.Model):
     
     def get_avatar_url(self):
         """Lấy url cho ảnh avatar"""
-        avatar = Product_Image.objects.filter(prod_name=self, is_avatar=True).first()
+        avatar = Product_Image.objects.filter(product=self, is_avatar=True).first()
         return avatar.ImageURL if avatar else None
     
     def formatted_price(self):
@@ -109,7 +112,7 @@ class Product(models.Model):
     
 class Product_Image(models.Model):
     """ 5. Class Product_Image chứa các ảnh của 1 món ăn, 1 món ăn có thể có nhiều ảnh khác nhau, nhưng chỉ có 1 ảnh là avatar"""
-    prod_name = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True, blank=False) # Khóa ngoại tham chiếu đến món ăn
+    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True, blank=False) # Khóa ngoại tham chiếu đến món ăn
     prod_image = models.ImageField(null=True, blank=False) # Ảnh của món ăn
     is_avatar = models.BooleanField(default=False) # Thuộc tính xác đĩnh xem ảnh có là avatar của món ăn hay không (True: Có ; False: Không)
 
@@ -118,13 +121,13 @@ class Product_Image(models.Model):
         if self.prod_name:
             # Nếu là avatar thì trả về avatar + tên món ăn
             if self.is_avatar:
-                return f"avatar_{self.prod_name.prod_name}" 
-            return self.prod_name.prod_name  # Còn không thì chỉ tên món ăn
+                return f"avatar_{self.product.prod_name}" 
+            return self.product.prod_name  # Còn không thì chỉ tên món ăn
         return "Unknown Product Image"  # Dự phòng nếu không có món ăn nào
     
-    class Meta:
-        # Ràng buộc 1 món ăn chỉ có thể có 1 ảnh là avatar
-        unique_together = ('prod_name', 'is_avatar')  
+    # class Meta:
+    #     # Ràng buộc 1 món ăn chỉ có thể có 1 ảnh là avatar
+    #     unique_together = ('product', 'is_avatar')  
 
     @property
     def ImageURL(self):
